@@ -52,24 +52,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update last login
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { lastLoginAt: new Date() },
-    });
+    // Update last login (não bloqueia o login caso o filesystem esteja temporariamente restrito)
+    try {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { lastLoginAt: new Date() },
+      });
+    } catch (updateErr) {
+      console.warn('[Auth] Não foi possível atualizar lastLoginAt:', updateErr);
+    }
 
     const token = await createSessionToken({ userId: user.id });
     await setSessionCookie(token);
 
-    // Audit log
-    await recordAuditLog({
-      actorUserId: user.id,
-      action: 'LOGIN',
-      entityType: 'USER',
-      entityId: user.id,
-      afterData: { email: user.email, role: user.role.key },
-      ipAddress: request.headers.get('x-forwarded-for') || '127.0.0.1',
-    });
+    // Audit log (não bloqueia a autenticação)
+    try {
+      await recordAuditLog({
+        actorUserId: user.id,
+        action: 'LOGIN',
+        entityType: 'USER',
+        entityId: user.id,
+        afterData: { email: user.email, role: user.role.key },
+        ipAddress: request.headers.get('x-forwarded-for') || '127.0.0.1',
+      });
+    } catch (auditErr) {
+      console.warn('[Auth] Não foi possível gravar auditoria de login:', auditErr);
+    }
 
     return NextResponse.json({
       success: true,
@@ -82,10 +90,13 @@ export async function POST(request: NextRequest) {
         permissions: user.role.permissions.map((rp) => rp.permission.key),
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro na rota de login:', error);
     return NextResponse.json(
-      { error: 'Erro interno ao processar autenticação.' },
+      {
+        error: 'Erro interno ao processar autenticação.',
+        message: error?.message || 'Falha ao acessar o banco de dados.',
+      },
       { status: 500 }
     );
   }
