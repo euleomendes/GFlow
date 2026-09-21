@@ -31,8 +31,10 @@ import {
   ExternalLink,
   Printer,
   Download,
+  Award,
 } from 'lucide-react';
 import { AuthenticatedUser } from '@/types';
+import ConvertToSaleModal from '@/components/common/ConvertToSaleModal';
 
 interface ProjectionsClientProps {
   currentUser: AuthenticatedUser;
@@ -95,6 +97,7 @@ export default function ProjectionsClient({
   // Modals State
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState<any | null>(null);
+  const [selectedOppToConvert, setSelectedOppToConvert] = useState<any | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [modalError, setModalError] = useState('');
 
@@ -909,14 +912,27 @@ export default function ProjectionsClient({
                               </div>
                             </div>
 
-                            <button
-                              type="button"
-                              onClick={() => handleOpenEdit(opp)}
-                              className="p-2 text-slate-500 hover:text-blue-slate hover:bg-slate-100 rounded-lg border border-slate-300 transition-colors print:hidden"
-                              title="Atualizar Follow-up / Projeção"
-                            >
-                              <Edit3 className="w-4 h-4" />
-                            </button>
+                            <div className="flex items-center gap-1.5 print:hidden">
+                              {opp.stage !== 'CLOSED_WON' && (
+                                <button
+                                  type="button"
+                                  onClick={() => setSelectedOppToConvert(opp)}
+                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-xs transition-colors"
+                                  title="Converter Negociação em Venda Fechada"
+                                >
+                                  <Award className="w-3.5 h-3.5" />
+                                  <span className="hidden sm:inline">Converter</span>
+                                </button>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => handleOpenEdit(opp)}
+                                className="p-2 text-slate-500 hover:text-blue-slate hover:bg-slate-100 rounded-lg border border-slate-300 transition-colors"
+                                title="Atualizar Follow-up / Projeção"
+                              >
+                                <Edit3 className="w-4 h-4" />
+                              </button>
+                            </div>
                           </div>
                         </div>
                       );
@@ -1484,14 +1500,27 @@ export default function ProjectionsClient({
                             </span>
                           </div>
 
-                          <button
-                            type="button"
-                            onClick={() => handleOpenEdit(deal)}
-                            className="p-2 border border-slate-300 rounded-lg hover:bg-slate-100 text-slate-600"
-                            title="Atualizar Follow-up"
-                          >
-                            <Edit3 className="w-4 h-4" />
-                          </button>
+                          <div className="flex items-center gap-1.5 print:hidden">
+                            {deal.stage !== 'CLOSED_WON' && (
+                              <button
+                                type="button"
+                                onClick={() => setSelectedOppToConvert(deal)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-xs transition-colors"
+                                title="Converter Negociação em Venda Fechada"
+                              >
+                                <Award className="w-3.5 h-3.5" />
+                                <span className="hidden sm:inline">Converter</span>
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => handleOpenEdit(deal)}
+                              className="p-2 border border-slate-300 rounded-lg hover:bg-slate-100 text-slate-600"
+                              title="Atualizar Follow-up"
+                            >
+                              <Edit3 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -1852,6 +1881,18 @@ export default function ProjectionsClient({
             </form>
           </div>
         </div>
+      )}
+
+      {/* Modal: Converter Negociação em Venda Fechada */}
+      {selectedOppToConvert && (
+        <ConvertToSaleModal
+          isOpen={!!selectedOppToConvert}
+          onClose={() => setSelectedOppToConvert(null)}
+          opportunity={selectedOppToConvert}
+          onSuccess={() => {
+            fetchProjections();
+          }}
+        />
       )}
     </div>
   );

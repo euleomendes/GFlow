@@ -19,8 +19,10 @@ import {
   User,
   Kanban,
   List,
+  Award,
 } from 'lucide-react';
 import { AuthenticatedUser } from '@/types';
+import ConvertToSaleModal from '@/components/common/ConvertToSaleModal';
 
 interface OpportunitiesClientProps {
   initialOpportunities: any[];
@@ -65,6 +67,7 @@ export default function OpportunitiesClient({
   // Modal State
   const [showModal, setShowModal] = useState(false);
   const [showProposalsModal, setShowProposalsModal] = useState<any | null>(null);
+  const [selectedOppToConvert, setSelectedOppToConvert] = useState<any | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -396,15 +399,27 @@ export default function OpportunitiesClient({
                         </button>
 
                         {s.key !== 'CLOSED_WON' && (
-                          <button
-                            type="button"
-                            onClick={() => handleAdvanceStage(opp.id, opp.stage)}
-                            className="text-blue-600 hover:text-blue-800 font-bold flex items-center gap-0.5"
-                            title="Avançar para a próxima etapa"
-                          >
-                            <span>Avançar</span>
-                            <ChevronRight className="w-3 h-3" />
-                          </button>
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedOppToConvert(opp)}
+                              className="px-1.5 py-0.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold border border-emerald-200 flex items-center gap-0.5 transition-colors"
+                              title="Converter em Venda Oficial Fechada"
+                            >
+                              <Award className="w-3 h-3" />
+                              <span>Fechar</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleAdvanceStage(opp.id, opp.stage)}
+                              className="text-blue-600 hover:text-blue-800 font-bold flex items-center gap-0.5"
+                              title="Avançar para a próxima etapa"
+                            >
+                              <span>Avançar</span>
+                              <ChevronRight className="w-3 h-3" />
+                            </button>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -458,13 +473,26 @@ export default function OpportunitiesClient({
                     {opp.nextStep || '—'}
                   </td>
                   <td className="py-3 px-4 text-right">
-                    <button
-                      type="button"
-                      onClick={() => setShowProposalsModal(opp)}
-                      className="text-blue-600 hover:text-blue-800 font-semibold text-[11px]"
-                    >
-                      Propostas
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                      {opp.stage !== 'CLOSED_WON' && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedOppToConvert(opp)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] shadow-2xs transition-colors"
+                          title="Converter em Venda Oficial Fechada"
+                        >
+                          <Award className="w-3.5 h-3.5" />
+                          <span>Converter</span>
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setShowProposalsModal(opp)}
+                        className="text-blue-600 hover:text-blue-800 font-semibold text-[11px] px-2 py-1 rounded hover:bg-blue-50"
+                      >
+                        Propostas
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -711,6 +739,18 @@ export default function OpportunitiesClient({
             </form>
           </div>
         </div>
+      )}
+
+      {/* Modal: Converter em Venda Fechada */}
+      {selectedOppToConvert && (
+        <ConvertToSaleModal
+          isOpen={!!selectedOppToConvert}
+          onClose={() => setSelectedOppToConvert(null)}
+          opportunity={selectedOppToConvert}
+          onSuccess={() => {
+            router.refresh();
+          }}
+        />
       )}
     </div>
   );

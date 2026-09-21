@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
       reference,
       notes,
       opportunityId,
+      projectId,
       executiveId,
     } = body;
 
@@ -95,11 +96,22 @@ export async function POST(request: NextRequest) {
 
     const assignedExecutiveId = isManager(user) && executiveId ? executiveId : user.id;
 
+    // Se houver oportunidade vinculada, verificar projeto se não fornecido
+    let targetProjectId = projectId || null;
+    if (!targetProjectId && opportunityId) {
+      const opp = await prisma.opportunity.findUnique({
+        where: { id: opportunityId },
+        select: { projectId: true },
+      });
+      if (opp?.projectId) targetProjectId = opp.projectId;
+    }
+
     const sale = await prisma.sale.create({
       data: {
         clientId,
         executiveId: assignedExecutiveId,
         areaId: area.id,
+        projectId: targetProjectId,
         value: parseFloat(value),
         closedAt: closedAt ? new Date(closedAt) : new Date(),
         reference: reference || `CONTRATO-${Date.now().toString().slice(-6)}`,
@@ -111,6 +123,7 @@ export async function POST(request: NextRequest) {
         client: true,
         area: true,
         executive: true,
+        project: true,
       },
     });
 

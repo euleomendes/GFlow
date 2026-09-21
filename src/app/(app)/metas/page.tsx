@@ -83,7 +83,7 @@ export default async function MetasPage() {
             Metas Comerciais & Acompanhamento de Atingimento
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Metas de faturamento e visitas por executivo e área de negócio (TV Guararapes e GPlus Digital).
+            Metas de faturamento e visitas por executivo e área de negócio (TV Guararapes, GPlus Digital e Redes Sociais).
           </p>
         </div>
 

@@ -39,6 +39,45 @@ export default async function AgendaPage() {
     orderBy: { visitDate: 'asc' },
   });
 
+  // Fetch upcoming deadlines from pipeline opportunities
+  const upcomingDeadlines = await prisma.opportunity.findMany({
+    where: {
+      status: 'OPEN',
+      expectedCloseDate: { not: null },
+      ...(user.roleKey === 'manager' ? {} : { executiveId: user.id }),
+    },
+    include: {
+      client: {
+        select: {
+          id: true,
+          tradeName: true,
+          legalName: true,
+        },
+      },
+      project: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      area: {
+        select: {
+          id: true,
+          key: true,
+          name: true,
+        },
+      },
+      executive: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+    orderBy: { expectedCloseDate: 'asc' },
+    take: 20,
+  });
+
   const clients = await prisma.client.findMany({
     where: { deletedAt: null },
     select: { id: true, tradeName: true, legalName: true },
@@ -53,7 +92,7 @@ export default async function AgendaPage() {
             Agenda Comercial & Follow-ups
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Compromissos, visitas agendadas, reuniões com clientes e prazos de retorno de propostas.
+            Compromissos, visitas agendadas, reuniões com clientes e prazos de fechamento de propostas e projeções.
           </p>
         </div>
       </div>
@@ -61,6 +100,7 @@ export default async function AgendaPage() {
       <AgendaClient
         initialEvents={events}
         upcomingVisits={upcomingVisits}
+        upcomingDeadlines={upcomingDeadlines}
         clients={clients}
         currentUser={user}
       />
