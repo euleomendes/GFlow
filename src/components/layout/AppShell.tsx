@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import { AuthenticatedUser, AreaFilter } from '@/types';
@@ -10,9 +11,28 @@ interface AppShellProps {
   children: React.ReactNode;
 }
 
-export default function AppShell({ user, children }: AppShellProps) {
+function AppShellContent({ user, children }: AppShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedArea, setSelectedArea] = useState<AreaFilter>('all');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const areaParam = searchParams?.get('area') as AreaFilter;
+  const selectedArea: AreaFilter =
+    areaParam && ['tv', 'gplus', 'redes_sociais'].includes(areaParam)
+      ? areaParam
+      : 'all';
+
+  const handleAreaChange = (newArea: AreaFilter) => {
+    const params = new URLSearchParams(searchParams ? searchParams.toString() : '');
+    if (newArea === 'all') {
+      params.delete('area');
+    } else {
+      params.set('area', newArea);
+    }
+    const qs = params.toString();
+    router.push(`${pathname}${qs ? `?${qs}` : ''}`);
+  };
 
   return (
     <div className="min-h-screen bg-slate-100 flex print:bg-white">
@@ -32,7 +52,7 @@ export default function AppShell({ user, children }: AppShellProps) {
             user={user}
             onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
             currentArea={selectedArea}
-            onAreaChange={setSelectedArea}
+            onAreaChange={handleAreaChange}
           />
         </div>
 
@@ -41,5 +61,13 @@ export default function AppShell({ user, children }: AppShellProps) {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function AppShell(props: AppShellProps) {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-100" />}>
+      <AppShellContent {...props} />
+    </Suspense>
   );
 }

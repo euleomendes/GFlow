@@ -30,6 +30,7 @@ import {
   Calendar,
   CheckCircle2,
   Flame,
+  Share2,
 } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -212,9 +213,10 @@ export default async function DashboardPage({
       })
     : [];
 
-  // Vendas por Área (TV vs GPlus)
+  // Vendas por Área (TV vs GPlus vs Redes Sociais)
   const tvSales = sales.filter((s) => s.area?.key === 'tv').reduce((acc, curr) => acc + curr.value, 0);
   const gplusSales = sales.filter((s) => s.area?.key === 'gplus').reduce((acc, curr) => acc + curr.value, 0);
+  const socialSales = sales.filter((s) => s.area?.key === 'redes_sociais').reduce((acc, curr) => acc + curr.value, 0);
 
   // 8. Métricas de Evolução e Distribuição (Evolutivo e Pizza)
   const evolution = calculateExecutiveMonthlyEvolution(sales, goals, 4);
@@ -225,12 +227,16 @@ export default async function DashboardPage({
   const donutCircumference = 2 * Math.PI * donutRadius;
   const tvDistItem = distribution.items.find((i) => i.key === 'tv');
   const gplusDistItem = distribution.items.find((i) => i.key === 'gplus');
+  const socialDistItem = distribution.items.find((i) => i.key === 'redes_sociais');
   const tvPercent = tvDistItem?.percentage || 0;
   const gplusPercent = gplusDistItem?.percentage || 0;
+  const socialPercent = socialDistItem?.percentage || 0;
 
   const tvStrokeDash = (tvPercent / 100) * donutCircumference;
   const gplusStrokeDash = (gplusPercent / 100) * donutCircumference;
+  const socialStrokeDash = (socialPercent / 100) * donutCircumference;
   const gplusStrokeOffset = -tvStrokeDash;
+  const socialStrokeOffset = -(tvStrokeDash + gplusStrokeDash);
 
   // Valor máximo para escala das barras evolutivas
   const maxEvolutionValue = Math.max(
@@ -290,7 +296,7 @@ export default async function DashboardPage({
             />
           )}
 
-          {/* Seletor de Área (TV / GPlus / Todas) */}
+          {/* Seletor de Área (TV / GPlus / Redes Sociais / Todas) */}
           <div className="inline-flex bg-white p-1 rounded-lg border border-slate-300 shadow-sm text-xs font-semibold">
             <Link
               href={buildFilterUrl('all', selectedExecutiveId)}
@@ -321,6 +327,16 @@ export default async function DashboardPage({
               }`}
             >
               GPlus
+            </Link>
+            <Link
+              href={buildFilterUrl('redes_sociais', selectedExecutiveId)}
+              className={`px-3 py-1 rounded-md transition-all ${
+                selectedAreaKey === 'redes_sociais'
+                  ? 'bg-purple-600 text-white shadow-xs'
+                  : 'text-deep-space/70 hover:text-purple-600'
+              }`}
+            >
+              Redes Sociais
             </Link>
           </div>
         </div>
@@ -751,7 +767,7 @@ export default async function DashboardPage({
                   Distribuição de Faturamento
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Proporção de receitas entre TV Aberta e Portal Digital
+                  Proporção de receitas entre TV Aberta, Portal Digital e Redes Sociais
                 </p>
               </div>
             </div>
@@ -797,6 +813,20 @@ export default async function DashboardPage({
                       className="transition-all duration-700 ease-out"
                     />
                   )}
+                  {/* Arco Redes Sociais (#9333EA purple-600) */}
+                  {socialPercent > 0 && (
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r={donutRadius}
+                      fill="transparent"
+                      stroke="#9333EA"
+                      strokeWidth="12"
+                      strokeDasharray={`${socialStrokeDash} ${donutCircumference}`}
+                      strokeDashoffset={socialStrokeOffset}
+                      className="transition-all duration-700 ease-out"
+                    />
+                  )}
                 </svg>
 
                 {/* Texto Central do Donut */}
@@ -814,9 +844,9 @@ export default async function DashboardPage({
               </div>
 
               {/* Legenda rica ao lado */}
-              <div className="space-y-3 w-full max-w-xs">
+              <div className="space-y-2.5 w-full max-w-xs">
                 {/* TV Guararapes */}
-                <div className="p-3.5 rounded-xl border border-slate-300 bg-slate-50/70">
+                <div className="p-3 rounded-xl border border-slate-300 bg-slate-50/70">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#1D2D44] inline-block" />
@@ -826,7 +856,7 @@ export default async function DashboardPage({
                       {tvPercent}%
                     </span>
                   </div>
-                  <div className="mt-1.5 flex items-center justify-between text-[11px] text-slate-500">
+                  <div className="mt-1 flex items-center justify-between text-[11px] text-slate-500">
                     <span>{formatCurrency(tvDistItem?.value || 0)}</span>
                     <span className="text-[10px] bg-deep-space/10 text-deep-space px-2 py-0.5 rounded font-semibold border border-deep-space/20">
                       Canal 9.1
@@ -835,7 +865,7 @@ export default async function DashboardPage({
                 </div>
 
                 {/* Portal GPlus */}
-                <div className="p-3.5 rounded-xl border border-slate-300 bg-slate-50/70">
+                <div className="p-3 rounded-xl border border-slate-300 bg-slate-50/70">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#3E5C76] inline-block" />
@@ -845,10 +875,29 @@ export default async function DashboardPage({
                       {gplusPercent}%
                     </span>
                   </div>
-                  <div className="mt-1.5 flex items-center justify-between text-[11px] text-slate-500">
+                  <div className="mt-1 flex items-center justify-between text-[11px] text-slate-500">
                     <span>{formatCurrency(gplusDistItem?.value || 0)}</span>
                     <span className="text-[10px] bg-blue-slate/10 text-blue-slate px-2 py-0.5 rounded font-semibold border border-blue-slate/20">
                       Digital
+                    </span>
+                  </div>
+                </div>
+
+                {/* Redes Sociais */}
+                <div className="p-3 rounded-xl border border-slate-300 bg-slate-50/70">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#9333EA] inline-block" />
+                      <span className="text-xs font-bold text-ink-black">Redes Sociais</span>
+                    </div>
+                    <span className="text-xs font-extrabold text-purple-600">
+                      {socialPercent}%
+                    </span>
+                  </div>
+                  <div className="mt-1 flex items-center justify-between text-[11px] text-slate-500">
+                    <span>{formatCurrency(socialDistItem?.value || 0)}</span>
+                    <span className="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded font-semibold border border-purple-200">
+                      Social Media
                     </span>
                   </div>
                 </div>
@@ -908,6 +957,8 @@ export default async function DashboardPage({
                           className={`text-[10px] font-bold px-1.5 py-0.2 rounded uppercase border ${
                             opp.area?.key === 'tv'
                               ? 'bg-deep-space/10 text-deep-space border-deep-space/30'
+                              : opp.area?.key === 'redes_sociais'
+                              ? 'bg-purple-100 text-purple-700 border-purple-300'
                               : 'bg-blue-slate/10 text-blue-slate border-blue-slate/30'
                           }`}
                         >
@@ -933,17 +984,17 @@ export default async function DashboardPage({
             )}
           </div>
 
-          {/* Comparativo de Área (TV vs GPlus) */}
+          {/* Comparativo de Área (TV vs GPlus vs Redes Sociais) */}
           <div className="bg-white border border-slate-300 rounded-xl p-6 shadow-sm">
             <h2 className="text-sm font-bold text-ink-black mb-1">
               Desempenho por Área de Negócio
             </h2>
             <p className="text-xs text-slate-500 mb-6">
-              Distribuição do faturamento entre televisão aberta e plataformas digitais GPlus
+              Distribuição do faturamento entre televisão aberta, plataformas digitais GPlus e redes sociais
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="p-6 rounded-xl border border-slate-300 bg-slate-50/60 shadow-xs hover:border-deep-space/60 transition-all">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="p-5 rounded-xl border border-slate-300 bg-slate-50/60 shadow-xs hover:border-deep-space/60 transition-all">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Tv className="w-4 h-4 text-deep-space" />
@@ -953,7 +1004,7 @@ export default async function DashboardPage({
                     Canal 9.1
                   </span>
                 </div>
-                <div className="mt-4 text-2xl font-black text-deep-space">
+                <div className="mt-4 text-xl sm:text-2xl font-black text-deep-space">
                   {formatCurrency(tvSales)}
                 </div>
                 <p className="text-[11px] text-slate-500 mt-1.5">
@@ -961,21 +1012,39 @@ export default async function DashboardPage({
                 </p>
               </div>
 
-              <div className="p-6 rounded-xl border border-slate-300 bg-slate-50/60 shadow-xs hover:border-blue-slate/60 transition-all">
+              <div className="p-5 rounded-xl border border-slate-300 bg-slate-50/60 shadow-xs hover:border-blue-slate/60 transition-all">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Layers className="w-4 h-4 text-blue-slate" />
                     <span className="text-xs font-bold text-ink-black">GPlus Digital</span>
                   </div>
                   <span className="text-[10px] font-bold bg-blue-slate/10 text-blue-slate px-2 py-0.5 rounded border border-blue-slate/30">
-                    Multiplataforma
+                    Portal Web
                   </span>
                 </div>
-                <div className="mt-4 text-2xl font-black text-blue-slate">
+                <div className="mt-4 text-xl sm:text-2xl font-black text-blue-slate">
                   {formatCurrency(gplusSales)}
                 </div>
                 <p className="text-[11px] text-slate-500 mt-1.5">
-                  Projetos digitais, redes sociais e portal
+                  Banners, branded content e portal
+                </p>
+              </div>
+
+              <div className="p-5 rounded-xl border border-slate-300 bg-slate-50/60 shadow-xs hover:border-purple-500/60 transition-all">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Share2 className="w-4 h-4 text-purple-600" />
+                    <span className="text-xs font-bold text-ink-black">Redes Sociais</span>
+                  </div>
+                  <span className="text-[10px] font-bold bg-purple-100 text-purple-700 px-2 py-0.5 rounded border border-purple-300">
+                    Social Media
+                  </span>
+                </div>
+                <div className="mt-4 text-xl sm:text-2xl font-black text-purple-600">
+                  {formatCurrency(socialSales)}
+                </div>
+                <p className="text-[11px] text-slate-500 mt-1.5">
+                  Instagram, TikTok, YouTube e Reels
                 </p>
               </div>
             </div>

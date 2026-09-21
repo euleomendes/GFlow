@@ -18,6 +18,7 @@ import {
   ChevronRight,
   AlertCircle,
   FileSpreadsheet,
+  Share2,
 } from 'lucide-react';
 import { AuthenticatedUser } from '@/types';
 
@@ -196,9 +197,10 @@ export default function ReportsClient({ currentUser, executives }: ReportsClient
               onChange={(e) => setAreaKey(e.target.value)}
               className="p-1.5 bg-slate-50 border border-slate-200 rounded-lg font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
-              <option value="ALL">Todas as Áreas (TV + GPlus)</option>
+              <option value="ALL">Todas as Áreas (TV + GPlus + Redes Sociais)</option>
               <option value="tv">TV Guararapes (Canal 9.1)</option>
               <option value="gplus">Portal GPlus (Digital)</option>
+              <option value="redes_sociais">Redes Sociais (Digital)</option>
             </select>
           </div>
 
@@ -333,7 +335,7 @@ export default function ReportsClient({ currentUser, executives }: ReportsClient
               : 'border-transparent text-slate-500 hover:text-slate-800'
           }`}
         >
-          Análise TV × GPlus (Cross-Selling)
+          Análise Multiplataforma & Cross-Selling
         </button>
       </div>
 
@@ -344,44 +346,47 @@ export default function ReportsClient({ currentUser, executives }: ReportsClient
             <table className="w-full text-left border-collapse text-xs">
               <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold uppercase text-[10px]">
                 <tr>
-                  <th className="py-3 px-4">Data Fechamento</th>
-                  <th className="py-3 px-4">Referência</th>
-                  <th className="py-3 px-4">Cliente</th>
-                  <th className="py-3 px-4">Executivo</th>
-                  <th className="py-3 px-4">Área</th>
-                  <th className="py-3 px-4">Projeto</th>
-                  <th className="py-3 px-4 text-right">Valor Oficial</th>
+                  <th className="py-2.5 px-3">Data</th>
+                  <th className="py-2.5 px-3">Cliente</th>
+                  <th className="py-2.5 px-3">Executivo</th>
+                  <th className="py-2.5 px-3">Área</th>
+                  <th className="py-2.5 px-3">Projeto</th>
+                  <th className="py-2.5 px-3 text-right">Valor Líquido</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
-                {!reportData?.sales || reportData.sales.length === 0 ? (
-                  // REGRA 7: Estado vazio factual sem dados fictícios
+              <tbody className="divide-y divide-slate-100">
+                {reportData?.sales?.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-12 text-center text-slate-400">
-                      Nenhuma venda registrada no período selecionado.
+                    <td colSpan={6} className="py-8 text-center text-slate-400">
+                      Nenhuma venda registrada com os filtros aplicados.
                     </td>
                   </tr>
                 ) : (
-                  reportData.sales.map((sale: any) => (
-                    <tr key={sale.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3 px-4 text-slate-600">{formatDate(sale.closedAt)}</td>
-                      <td className="py-3 px-4 font-mono text-[11px] text-slate-500">
-                        {sale.reference || sale.id.slice(0, 8)}
+                  reportData?.sales?.map((s: any) => (
+                    <tr key={s.id} className="hover:bg-slate-50/60 transition-colors">
+                      <td className="py-2 px-3 text-slate-600">{formatDate(s.closedAt)}</td>
+                      <td className="py-2 px-3 font-semibold text-slate-900">
+                        {s.client?.tradeName || s.client?.legalName || 'Cliente'}
                       </td>
-                      <td className="py-3 px-4 font-semibold text-slate-900">
-                        {sale.client?.legalName || sale.client?.tradeName}
-                      </td>
-                      <td className="py-3 px-4 text-slate-700">{sale.executive?.name}</td>
-                      <td className="py-3 px-4">
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
-                          {sale.area?.name}
+                      <td className="py-2 px-3 text-slate-700">{s.executive?.name}</td>
+                      <td className="py-2 px-3">
+                        <span
+                          className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded border ${
+                            s.area?.key === 'tv'
+                              ? 'bg-blue-50 text-blue-700 border-blue-200'
+                              : s.area?.key === 'redes_sociais'
+                              ? 'bg-purple-50 text-purple-700 border-purple-200'
+                              : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          }`}
+                        >
+                          {s.area?.name || 'Geral'}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-slate-500">
-                        {sale.project?.name || <span className="text-slate-400">Geral</span>}
+                      <td className="py-2 px-3 text-slate-500 text-[11px]">
+                        {s.project?.name || 'Venda Avulsa'}
                       </td>
-                      <td className="py-3 px-4 text-right font-black text-slate-900">
-                        {formatCurrency(sale.value)}
+                      <td className="py-2 px-3 text-right font-bold text-slate-900">
+                        {formatCurrency(s.value)}
                       </td>
                     </tr>
                   ))
@@ -392,71 +397,62 @@ export default function ReportsClient({ currentUser, executives }: ReportsClient
         </div>
       )}
 
-      {/* TAB 2: DESEMPENHO POR EXECUTIVO (Regras 15 e 16) */}
+      {/* TAB 2: PERFORMANCE POR EXECUTIVO (Regras 15 e 16) */}
       {activeTab === 'EXECUTIVES' && (
         <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold uppercase text-[10px]">
                 <tr>
-                  <th className="py-3 px-4">Executivo Comercial</th>
-                  <th className="py-3 px-4 text-right">Faturamento Fechado</th>
-                  <th className="py-3 px-4 text-center">Vendas</th>
-                  <th className="py-3 px-4 text-right">Ticket Médio</th>
-                  <th className="py-3 px-4 text-center">Visitas</th>
-                  <th className="py-3 px-4 text-center">Oportunidades</th>
-                  <th className="py-3 px-4 text-right">Meta (R$)</th>
-                  <th className="py-3 px-4 text-center">% Atingimento</th>
-                  <th className="py-3 px-4 text-right">Conversão</th>
+                  <th className="py-2.5 px-3">Executivo Comercial</th>
+                  <th className="py-2.5 px-3 text-right">Faturamento (R$)</th>
+                  <th className="py-2.5 px-3 text-right">Meta (R$)</th>
+                  <th className="py-2.5 px-3 text-right">% Atingimento</th>
+                  <th className="py-2.5 px-3 text-right">Contratos</th>
+                  <th className="py-2.5 px-3 text-right">Ticket Médio</th>
+                  <th className="py-2.5 px-3 text-right">Visitas</th>
+                  <th className="py-2.5 px-3 text-right">Taxa Conv.</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
-                {!reportData?.executivePerformance || reportData.executivePerformance.length === 0 ? (
+              <tbody className="divide-y divide-slate-100">
+                {reportData?.executivePerformance?.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="py-12 text-center text-slate-400">
-                      Nenhum executivo com dados no período selecionado.
+                    <td colSpan={8} className="py-8 text-center text-slate-400">
+                      Nenhum dado de executivo disponível para o período.
                     </td>
                   </tr>
                 ) : (
-                  reportData.executivePerformance.map((item: any) => (
-                    <tr key={item.executive.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3 px-4">
-                        <div className="font-bold text-slate-900">{item.executive.name}</div>
-                        <div className="text-[11px] text-slate-400">{item.executive.email}</div>
+                  reportData?.executivePerformance?.map((ep: any) => (
+                    <tr key={ep.executive.id} className="hover:bg-slate-50/60 transition-colors">
+                      <td className="py-2 px-3 font-semibold text-slate-900">{ep.executive.name}</td>
+                      <td className="py-2 px-3 text-right font-bold text-slate-900">
+                        {formatCurrency(ep.totalSalesValue)}
                       </td>
-                      <td className="py-3 px-4 text-right font-black text-slate-900">
-                        {formatCurrency(item.totalSalesValue)}
+                      <td className="py-2 px-3 text-right text-slate-500">
+                        {ep.goalTarget > 0 ? formatCurrency(ep.goalTarget) : 'Não atribuída'}
                       </td>
-                      <td className="py-3 px-4 text-center font-semibold text-slate-800">
-                        {item.salesCount}
+                      <td className="py-2 px-3 text-right">
+                        <span
+                          className={`font-bold px-1.5 py-0.5 rounded text-[11px] ${
+                            ep.attainmentPercentage >= 100
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : ep.attainmentPercentage >= 70
+                              ? 'bg-amber-100 text-amber-800'
+                              : 'bg-slate-100 text-slate-700'
+                          }`}
+                        >
+                          {ep.attainmentPercentage}%
+                        </span>
                       </td>
-                      <td className="py-3 px-4 text-right text-slate-700">
-                        {formatCurrency(item.ticketMedio)}
+                      <td className="py-2 px-3 text-right font-medium text-slate-700">
+                        {ep.salesCount}
                       </td>
-                      <td className="py-3 px-4 text-center text-slate-700">{item.visitsCount}</td>
-                      <td className="py-3 px-4 text-center text-slate-700">
-                        {item.opportunitiesCount}
+                      <td className="py-2 px-3 text-right text-slate-700">
+                        {formatCurrency(ep.ticketMedio)}
                       </td>
-                      <td className="py-3 px-4 text-right text-slate-600">
-                        {item.goalTarget > 0 ? formatCurrency(item.goalTarget) : 'Não cadastrada'}
-                      </td>
-                      <td className="py-3 px-4 text-center">
-                        {item.goalTarget > 0 ? (
-                          <span
-                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                              item.attainmentPercentage >= 100
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                : 'bg-amber-50 text-amber-700 border border-amber-200'
-                            }`}
-                          >
-                            {item.attainmentPercentage}%
-                          </span>
-                        ) : (
-                          <span className="text-slate-400">-</span>
-                        )}
-                      </td>
-                      <td className="py-3 px-4 text-right font-semibold text-slate-800">
-                        {item.conversionRate}%
+                      <td className="py-2 px-3 text-right text-slate-700">{ep.visitsCount}</td>
+                      <td className="py-2 px-3 text-right font-bold text-blue-700">
+                        {ep.conversionRate}%
                       </td>
                     </tr>
                   ))
@@ -467,59 +463,50 @@ export default function ReportsClient({ currentUser, executives }: ReportsClient
         </div>
       )}
 
-      {/* TAB 3: FUNIL OFICIAL & CONVERSÃO (Regra 11) */}
+      {/* TAB 3: FUNIL & CONVERSÃO (Regras 11 e 12) */}
       {activeTab === 'FUNNEL' && (
-        <div className="space-y-6">
-          <div className="bg-white p-5 rounded-xl border border-slate-200/80 shadow-xs">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h3 className="font-bold text-slate-900 text-sm">
-                Funil Oficial do GFlow (6 Etapas Padronizadas)
-              </h3>
-              <div className="text-xs font-semibold text-slate-600">
-                Taxa de Conversão Global:{' '}
-                <strong className="text-emerald-600">
-                  {reportData?.funnel?.overallConversionRate || 0}%
-                </strong>
-              </div>
-            </div>
+        <div className="bg-white p-6 rounded-xl border border-slate-200/80 shadow-xs space-y-6">
+          <div>
+            <h3 className="font-bold text-slate-900 text-sm">Distribuição das Oportunidades no Funil</h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Volume financeiro estimado e quantidade de negócios abertos em cada etapa do ciclo comercial.
+            </p>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-6 gap-3 mt-4">
-              {[
-                { stage: 'LEAD', label: '1. Lead' },
-                { stage: 'CONTACT', label: '2. Contato' },
-                { stage: 'MEETING', label: '3. Reunião' },
-                { stage: 'PROPOSAL', label: '4. Proposta' },
-                { stage: 'NEGOTIATION', label: '5. Negociação' },
-                { stage: 'CLOSED_WON', label: '6. Fechado Ganho' },
-              ].map((step) => {
-                const count = reportData?.funnel?.stageCounts?.[step.stage]?.count || 0;
-                const value =
-                  reportData?.funnel?.stageCounts?.[step.stage]?.totalEstimatedValue || 0;
-
-                return (
-                  <div
-                    key={step.stage}
-                    className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 flex flex-col justify-between"
-                  >
-                    <div>
-                      <div className="text-[11px] font-bold text-slate-600">{step.label}</div>
-                      <div className="text-2xl font-black text-slate-900 mt-2">{count}</div>
-                    </div>
-                    <div className="mt-3 pt-2 border-t border-slate-200 text-[11px] text-slate-500">
-                      Est: {formatCurrency(value)}
-                    </div>
+          {/* Etapas */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            {[
+              { stage: 'PROSPECTION', label: '1. Prospecção' },
+              { stage: 'BRIEFING', label: '2. Briefing' },
+              { stage: 'PROPOSAL', label: '3. Proposta' },
+              { stage: 'NEGOTIATION', label: '4. Negociação' },
+              { stage: 'CLOSED_WON', label: '5. Ganho / Fechado' },
+            ].map((step) => {
+              const count = reportData?.funnel?.stages?.[step.stage]?.count || 0;
+              const value = reportData?.funnel?.stages?.[step.stage]?.value || 0;
+              return (
+                <div
+                  key={step.stage}
+                  className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="text-[11px] font-bold text-slate-600">{step.label}</div>
+                    <div className="text-2xl font-black text-slate-900 mt-2">{count}</div>
                   </div>
-                );
-              })}
-            </div>
+                  <div className="mt-3 pt-2 border-t border-slate-200 text-[11px] text-slate-500">
+                    Est: {formatCurrency(value)}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
-      {/* TAB 4: ANÁLISE TV × GPLUS (Regra 14) */}
+      {/* TAB 4: ANÁLISE CROSS-SELLING (TV × GPLUS × REDES SOCIAIS) */}
       {activeTab === 'CROSS_SELLING' && (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Bloco 1: TV Somente */}
             <div className="bg-white p-5 rounded-xl border border-blue-200 shadow-xs flex flex-col">
               <div className="flex items-center justify-between pb-3 border-b border-blue-100">
@@ -532,7 +519,7 @@ export default function ReportsClient({ currentUser, executives }: ReportsClient
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-2 flex-1">
-                Clientes que operam apenas na TV aberta (Canal 9.1). Potencial para expansão e cross-selling no Portal GPlus Digital.
+                Clientes que operam apenas na TV aberta (Canal 9.1). Potencial para expansão e cross-selling no Portal GPlus e Redes Sociais.
               </p>
               <div className="mt-4 pt-3 border-t border-slate-100 max-h-48 overflow-y-auto space-y-1 text-xs">
                 {reportData?.crossSelling?.tvOnly?.clients?.length === 0 ? (
@@ -548,18 +535,18 @@ export default function ReportsClient({ currentUser, executives }: ReportsClient
             </div>
 
             {/* Bloco 2: GPlus Somente */}
-            <div className="bg-white p-5 rounded-xl border border-purple-200 shadow-xs flex flex-col">
-              <div className="flex items-center justify-between pb-3 border-b border-purple-100">
-                <h3 className="font-bold text-purple-900 text-sm flex items-center gap-1.5">
-                  <Layers className="w-4 h-4 text-purple-600" />
+            <div className="bg-white p-5 rounded-xl border border-blue-slate/30 shadow-xs flex flex-col">
+              <div className="flex items-center justify-between pb-3 border-b border-blue-slate/20">
+                <h3 className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                  <Layers className="w-4 h-4 text-blue-slate" />
                   Portal GPlus Somente
                 </h3>
-                <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800">
+                <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-blue-slate/10 text-blue-slate">
                   {reportData?.crossSelling?.gplusOnly?.count || 0}
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-2 flex-1">
-                Clientes que operam apenas no ecossistema digital GPlus. Potencial para expansão em grade da TV aberta.
+                Clientes que operam apenas no portal digital GPlus. Potencial para expansão em grade da TV aberta e Redes Sociais.
               </p>
               <div className="mt-4 pt-3 border-t border-slate-100 max-h-48 overflow-y-auto space-y-1 text-xs">
                 {reportData?.crossSelling?.gplusOnly?.clients?.length === 0 ? (
@@ -574,19 +561,46 @@ export default function ReportsClient({ currentUser, executives }: ReportsClient
               </div>
             </div>
 
-            {/* Bloco 3: TV + GPlus (Híbridos) */}
+            {/* Bloco 3: Redes Sociais Somente */}
+            <div className="bg-white p-5 rounded-xl border border-purple-200 shadow-xs flex flex-col">
+              <div className="flex items-center justify-between pb-3 border-b border-purple-100">
+                <h3 className="font-bold text-purple-900 text-sm flex items-center gap-1.5">
+                  <Share2 className="w-4 h-4 text-purple-600" />
+                  Redes Sociais Somente
+                </h3>
+                <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800">
+                  {reportData?.crossSelling?.socialOnly?.count || 0}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-2 flex-1">
+                Clientes que operam apenas no ecossistema de redes sociais (Instagram/TikTok/YouTube). Oportunidade para expansão em TV e Portal.
+              </p>
+              <div className="mt-4 pt-3 border-t border-slate-100 max-h-48 overflow-y-auto space-y-1 text-xs">
+                {reportData?.crossSelling?.socialOnly?.clients?.length === 0 ? (
+                  <div className="text-slate-400 py-2 text-center">Nenhum cliente nesta condição.</div>
+                ) : (
+                  reportData.crossSelling.socialOnly.clients.map((c: any) => (
+                    <div key={c.id} className="p-1.5 rounded bg-slate-50 text-slate-800 font-medium truncate">
+                      {c.legalName || c.tradeName}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Bloco 4: Multi-Área / Híbridos */}
             <div className="bg-white p-5 rounded-xl border border-emerald-200 shadow-xs flex flex-col">
               <div className="flex items-center justify-between pb-3 border-b border-emerald-100">
                 <h3 className="font-bold text-emerald-900 text-sm flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  Híbridos (TV + GPlus)
+                  Híbridos (Multi-Área)
                 </h3>
                 <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
                   {reportData?.crossSelling?.hybrid?.count || 0}
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-2 flex-1">
-                Clientes multiplataforma com presença simultânea na TV Guararapes e no Portal GPlus.
+                Clientes multiplataforma com presença simultânea em duas ou mais áreas comerciais (TV Guararapes, Portal GPlus e Redes Sociais).
               </p>
               <div className="mt-4 pt-3 border-t border-slate-100 max-h-48 overflow-y-auto space-y-1 text-xs">
                 {reportData?.crossSelling?.hybrid?.clients?.length === 0 ? (
