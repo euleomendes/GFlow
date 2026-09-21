@@ -27,6 +27,7 @@ interface OpportunitiesClientProps {
   clients: any[];
   areas: any[];
   executives: any[];
+  projects?: any[];
   currentUser: AuthenticatedUser;
 }
 
@@ -52,6 +53,7 @@ export default function OpportunitiesClient({
   clients,
   areas,
   executives,
+  projects = [],
   currentUser,
 }: OpportunitiesClientProps) {
   const router = useRouter();
@@ -68,6 +70,7 @@ export default function OpportunitiesClient({
 
   // Form State
   const [clientId, setClientId] = useState(clients[0]?.id || '');
+  const [projectId, setProjectId] = useState('');
   const [areaKey, setAreaKey] = useState('tv');
   const [stage, setStage] = useState('LEAD');
   const [estimatedValue, setEstimatedValue] = useState('');
@@ -110,6 +113,7 @@ export default function OpportunitiesClient({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           clientId,
+          projectId: projectId || null,
           areaKey,
           stage,
           estimatedValue: parseFloat(estimatedValue) || 0,
@@ -124,6 +128,7 @@ export default function OpportunitiesClient({
       if (!res.ok) throw new Error(data.error || 'Erro ao criar oportunidade');
 
       setShowModal(false);
+      setProjectId('');
       setEstimatedValue('');
       setNextStep('');
       setNotes('');
@@ -353,6 +358,12 @@ export default function OpportunitiesClient({
                         {opp.client.tradeName || opp.client.legalName}
                       </Link>
 
+                      {opp.project && (
+                        <span className="inline-block mt-1 text-[9px] font-bold px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 border border-purple-200">
+                          {opp.project.name}
+                        </span>
+                      )}
+
                       <div className="text-sm font-black text-slate-900 mt-2">
                         {formatCurrency(opp.estimatedValue)}
                       </div>
@@ -416,6 +427,11 @@ export default function OpportunitiesClient({
                     <Link href={`/clientes/${opp.client.id}`} className="hover:text-blue-600">
                       {opp.client.tradeName}
                     </Link>
+                    {opp.project && (
+                      <span className="block text-[9px] font-bold text-purple-700">
+                        {opp.project.name}
+                      </span>
+                    )}
                   </td>
                   <td className="py-3 px-4 font-bold text-[10px] uppercase text-blue-600">
                     {opp.area.name}
@@ -478,6 +494,20 @@ export default function OpportunitiesClient({
                     <option key={c.id} value={c.id}>
                       {c.tradeName || c.legalName}
                     </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase text-slate-700 mb-1">Projeto Comercial (Opcional)</label>
+                <select
+                  value={projectId}
+                  onChange={(e) => setProjectId(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+                >
+                  <option value="">Sem Projeto (Carteira Regular)</option>
+                  {projects.map((p) => (
+                    <option key={p.id} value={p.id}>{p.name}</option>
                   ))}
                 </select>
               </div>

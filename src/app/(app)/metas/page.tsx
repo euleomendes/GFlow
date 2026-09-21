@@ -86,6 +86,15 @@ export default async function MetasPage() {
             Metas de faturamento e visitas por executivo e área de negócio (TV Guararapes e GPlus Digital).
           </p>
         </div>
+
+        <div className="flex items-center gap-2">
+          <a
+            href="/projecoes"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-deep-space text-white text-xs font-bold shadow-xs hover:bg-ink-black transition-colors"
+          >
+            <span>Ver Projeções & Forecast (3 Meses) →</span>
+          </a>
+        </div>
       </div>
 
       <GoalsClient

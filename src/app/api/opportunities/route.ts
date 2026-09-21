@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
     const areaKey = searchParams.get('area') || '';
     const executiveId = searchParams.get('executiveId') || '';
     const clientId = searchParams.get('clientId') || '';
+    const projectId = searchParams.get('projectId') || '';
 
     const where: any = {
       deletedAt: null,
@@ -42,6 +43,10 @@ export async function GET(request: NextRequest) {
 
     if (clientId) {
       where.clientId = clientId;
+    }
+
+    if (projectId && projectId !== 'ALL') {
+      where.projectId = projectId;
     }
 
     // Role-based scoping: If executive, restrict to their own unless manager
@@ -71,6 +76,12 @@ export async function GET(request: NextRequest) {
           },
         },
         area: true,
+        project: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         proposals: {
           orderBy: { versionNumber: 'desc' },
         },
@@ -114,6 +125,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       clientId,
+      projectId,
       areaKey = 'tv',
       stage = 'LEAD',
       estimatedValue = 0,
@@ -140,6 +152,7 @@ export async function POST(request: NextRequest) {
     const opportunity = await prisma.opportunity.create({
       data: {
         clientId,
+        projectId: projectId || null,
         executiveId: assignedExecutiveId,
         areaId: area.id,
         stage,
@@ -156,6 +169,7 @@ export async function POST(request: NextRequest) {
         client: true,
         executive: true,
         area: true,
+        project: true,
       },
     });
 
@@ -181,6 +195,7 @@ export async function POST(request: NextRequest) {
           clientId: opportunity.clientId,
           executiveId: opportunity.executiveId,
           areaId: opportunity.areaId,
+          projectId: opportunity.projectId || null,
           value: opportunity.estimatedValue,
           closedAt: new Date(),
           status: 'ACTIVE',

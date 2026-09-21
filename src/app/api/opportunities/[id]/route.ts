@@ -64,6 +64,7 @@ export async function PUT(
     const body = await request.json();
     const {
       stage,
+      projectId,
       estimatedValue,
       probability,
       expectedCloseDate,
@@ -92,6 +93,7 @@ export async function PUT(
         stage: finalStage,
         estimatedValue: finalValue,
         probability: finalProb,
+        projectId: projectId !== undefined ? (projectId || null) : existingOpp.projectId,
         expectedCloseDate: expectedCloseDate !== undefined ? (expectedCloseDate ? new Date(expectedCloseDate) : null) : existingOpp.expectedCloseDate,
         nextStep: nextStep !== undefined ? nextStep : existingOpp.nextStep,
         notes: notes !== undefined ? notes : existingOpp.notes,
@@ -102,6 +104,7 @@ export async function PUT(
       include: {
         client: true,
         area: true,
+        project: true,
         executive: true,
       },
     });
@@ -119,6 +122,7 @@ export async function PUT(
             clientId: updatedOpp.clientId,
             executiveId: updatedOpp.executiveId,
             areaId: updatedOpp.areaId,
+            projectId: updatedOpp.projectId || null,
             value: updatedOpp.estimatedValue,
             closedAt: new Date(),
             status: 'ACTIVE',

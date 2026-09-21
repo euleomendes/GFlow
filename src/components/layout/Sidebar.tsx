@@ -10,6 +10,7 @@ import {
   CalendarCheck,
   Target,
   Calendar,
+  LineChart,
   Briefcase,
   FileSpreadsheet,
   FolderTree,
@@ -41,6 +42,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
   const commercialNav = [
     { name: 'Clientes', href: '/clientes', icon: Users },
     { name: 'Oportunidades', href: '/oportunidades', icon: TrendingUp },
+    { name: 'Projeções & Forecast', href: '/projecoes', icon: LineChart },
     { name: 'Vendas', href: '/vendas', icon: DollarSign },
     { name: 'Visitas', href: '/visitas', icon: CalendarCheck },
     { name: 'Metas', href: '/metas', icon: Target },

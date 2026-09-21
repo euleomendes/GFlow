@@ -34,6 +34,12 @@ export default async function OportunidadesPage() {
         },
       },
       area: true,
+      project: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
       proposals: {
         orderBy: { versionNumber: 'desc' },
       },
@@ -53,6 +59,11 @@ export default async function OportunidadesPage() {
     select: { id: true, name: true },
     orderBy: { name: 'asc' },
   });
+  const projects = await prisma.project.findMany({
+    where: { deletedAt: null },
+    select: { id: true, name: true },
+    orderBy: { name: 'asc' },
+  });
 
   return (
     <div className="space-y-6">
@@ -65,6 +76,15 @@ export default async function OportunidadesPage() {
             Acompanhamento das etapas comerciais: Lead, Contato, Reunião, Proposta, Negociação e Fechado.
           </p>
         </div>
+
+        <div className="flex items-center gap-2">
+          <a
+            href="/projecoes"
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-deep-space text-white text-xs font-bold shadow-xs hover:bg-ink-black transition-colors"
+          >
+            <span>Ver Projeções & Forecast (3 Meses) →</span>
+          </a>
+        </div>
       </div>
 
       <OpportunitiesClient
@@ -72,6 +92,7 @@ export default async function OportunidadesPage() {
         clients={clients}
         areas={areas}
         executives={executives}
+        projects={projects}
         currentUser={user}
       />
     </div>
