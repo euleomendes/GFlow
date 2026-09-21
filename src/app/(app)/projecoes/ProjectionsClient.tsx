@@ -29,6 +29,8 @@ import {
   X,
   Search,
   ExternalLink,
+  Printer,
+  Download,
 } from 'lucide-react';
 import { AuthenticatedUser } from '@/types';
 
@@ -243,6 +245,65 @@ export default function ProjectionsClient({
     }
   };
 
+  /**
+   * Exportação CSV com compatibilidade nativa para Microsoft Excel no Brasil
+   * UTF-8 com BOM (\uFEFF) e delimitador ';'
+   */
+  const handleExportCSV = () => {
+    if (!data?.allOpportunities || data.allOpportunities.length === 0) {
+      alert('Não há dados de negociações para exportar com os filtros atuais.');
+      return;
+    }
+
+    const headers = [
+      'Cliente',
+      'Projeto Comercial',
+      'Área',
+      'Executivo Responsável',
+      'Etapa Atual',
+      'Valor Estimado (R$)',
+      'Probabilidade (%)',
+      'Valor Ponderado (R$)',
+      'Prazo Previsto (Deadline)',
+      'Status do Prazo',
+      'Próximo Passo / Acompanhamento',
+      'Status da Negociação',
+    ];
+
+    const rows = data.allOpportunities.map((opp: any) => [
+      `"${(opp.client?.tradeName || opp.client?.legalName || '').replace(/"/g, '""')}"`,
+      `"${(opp.project?.name || 'Sem Projeto').replace(/"/g, '""')}"`,
+      `"${opp.area?.name || ''}"`,
+      `"${(opp.executive?.name || '').replace(/"/g, '""')}"`,
+      `"${opp.stage}"`,
+      opp.estimatedValue || 0,
+      `${opp.probability || 0}%`,
+      opp.weightedValue || 0,
+      `"${opp.formattedCloseDate || ''}"`,
+      `"${opp.deadlineStatus}"`,
+      `"${(opp.nextStep || '').replace(/"/g, '""')}"`,
+      `"${opp.status}"`,
+    ]);
+
+    const csvContent = '\uFEFF' + [
+      headers.join(';'),
+      ...rows.map((r: any) => r.join(';')),
+    ].join('\r\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `gflow_projecoes_forecast_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
   // Filtered Opportunities for the Deals Section in Forecast Tab
   const displayedOpportunities = useMemo(() => {
     if (!data?.allOpportunities) return [];
@@ -327,21 +388,41 @@ export default function ProjectionsClient({
           </div>
         </div>
 
-        {/* Action Button: Executivo Alimenta Projeção */}
-        <div className="flex items-center gap-2">
+        {/* Action Buttons: Exportar, Imprimir PDF e Alimentar Projeção */}
+        <div className="flex items-center flex-wrap gap-2 print:hidden">
+          <button
+            type="button"
+            onClick={handleExportCSV}
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-xl border border-slate-300 shadow-2xs transition-colors"
+            title="Exportar dados para Excel / Planilha CSV"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Exportar Planilha</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-xl border border-slate-300 shadow-2xs transition-colors"
+            title="Imprimir relatório limpo ou Salvar como PDF"
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span>Imprimir / PDF</span>
+          </button>
+
           <button
             type="button"
             onClick={() => setShowCreateModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-slate hover:bg-deep-space text-white text-xs font-bold rounded-xl shadow-sm transition-all hover:scale-[1.01]"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-slate hover:bg-deep-space text-white text-xs font-bold rounded-xl shadow-sm transition-all hover:scale-[1.01]"
           >
             <Plus className="w-4 h-4" />
-            <span>Alimentar / Nova Negociação</span>
+            <span>Alimentar Negociação</span>
           </button>
         </div>
       </div>
 
       {/* BARRA DE CONTROLE & FILTROS GLOBAIS */}
-      <div className="bg-white border border-slate-300 rounded-xl p-4 shadow-sm space-y-4">
+      <div className="bg-white border border-slate-300 rounded-xl p-4 shadow-sm space-y-4 print:hidden">
         <div className="flex flex-wrap items-center justify-between gap-3">
           {/* Mode Selector: 3 Meses Deslizantes vs Trimestre Específico */}
           <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200">
@@ -733,7 +814,7 @@ export default function ProjectionsClient({
                     </p>
                   </div>
 
-                  <div className="relative w-full sm:w-72">
+                  <div className="relative w-full sm:w-72 print:hidden">
                     <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
                     <input
                       type="text"
@@ -820,7 +901,7 @@ export default function ProjectionsClient({
                             <button
                               type="button"
                               onClick={() => handleOpenEdit(opp)}
-                              className="p-2 text-slate-500 hover:text-blue-slate hover:bg-slate-100 rounded-lg border border-slate-300 transition-colors"
+                              className="p-2 text-slate-500 hover:text-blue-slate hover:bg-slate-100 rounded-lg border border-slate-300 transition-colors print:hidden"
                               title="Atualizar Follow-up / Projeção"
                             >
                               <Edit3 className="w-4 h-4" />

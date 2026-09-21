@@ -13,6 +13,7 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { AuthenticatedUser, AreaFilter } from '@/types';
+import NotificationsPopover from './NotificationsPopover';
 
 interface TopbarProps {
   user: AuthenticatedUser;
@@ -119,16 +120,8 @@ export default function Topbar({
           </button>
         </div>
 
-        {/* Notifications Icon */}
-        <button
-          type="button"
-          onClick={() => alert('Notificações internas: Nenhuma pendência crítica no momento.')}
-          className="relative p-2 rounded-lg text-deep-space/75 hover:text-ink-black hover:bg-slate-100 transition-colors"
-          title="Notificações"
-        >
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-slate" />
-        </button>
+        {/* Notifications Popover */}
+        <NotificationsPopover />
 
         {/* User Pill */}
         <div className="flex items-center gap-2 pl-4 border-l border-slate-300">

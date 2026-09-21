@@ -26,6 +26,10 @@ import {
   PieChart,
   BarChart3,
   Award,
+  LineChart,
+  Calendar,
+  CheckCircle2,
+  Flame,
 } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -146,6 +150,26 @@ export default async function DashboardPage({
     (acc, curr) => acc + (curr.estimatedValue * curr.probability) / 100,
     0
   );
+
+  const totalForecastRevenue = totalSales + weightedPipeline;
+  const forecastAttainment = totalGoal > 0 ? Math.round((totalForecastRevenue / totalGoal) * 100) : 0;
+
+  const now = new Date();
+  const upcomingDeadlines = await prisma.opportunity.findMany({
+    where: {
+      status: 'OPEN',
+      expectedCloseDate: { not: null },
+      ...areaFilter,
+      ...userFilter,
+    },
+    include: {
+      client: true,
+      project: true,
+      executive: true,
+    },
+    orderBy: { expectedCloseDate: 'asc' },
+    take: 4,
+  });
 
   // 5. Clientes
   const activeClientsCount = await prisma.client.count({
@@ -401,6 +425,159 @@ export default async function DashboardPage({
               <span className="font-semibold text-deep-space">{totalVisitsCount} visitas</span>
               <span>registradas</span>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* NOVO WIDGET: FORECAST COMERCIAL, TERMÔMETRO DE METAS & DEADLINES DA SEMANA */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Bloco Forecast & Termômetro (7 colunas) */}
+        <div className="lg:col-span-7 bg-gradient-to-br from-deep-space via-ink-black to-slate-900 border border-slate-700 rounded-2xl p-6 text-white shadow-md flex flex-col justify-between">
+          <div>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-blue-slate flex items-center justify-center text-white">
+                  <LineChart className="w-4 h-4" />
+                </div>
+                <div>
+                  <h2 className="text-base font-black tracking-tight text-white">
+                    Forecast Comercial & Termômetro da Meta
+                  </h2>
+                  <p className="text-xs text-dusty-denim">
+                    Previsão preditiva considerando vendas realizadas + pipeline ponderado
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <span className="text-[10px] uppercase font-bold text-dusty-denim block">Atingimento Projetado</span>
+                <span className="text-2xl font-black text-emerald-400">
+                  {forecastAttainment}%
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 my-4">
+              <div className="p-3 bg-white/5 rounded-xl border border-white/10">
+                <span className="text-[10px] uppercase font-bold text-dusty-denim block">Meta</span>
+                <span className="text-sm font-bold text-white">{formatCurrency(totalGoal)}</span>
+              </div>
+              <div className="p-3 bg-white/5 rounded-xl border border-white/10">
+                <span className="text-[10px] uppercase font-bold text-emerald-400 block">Já Fechado</span>
+                <span className="text-sm font-bold text-emerald-400">{formatCurrency(totalSales)}</span>
+              </div>
+              <div className="p-3 bg-blue-500/10 rounded-xl border border-blue-400/30">
+                <span className="text-[10px] uppercase font-bold text-blue-300 block">Previsão Final</span>
+                <span className="text-sm font-bold text-blue-300">{formatCurrency(totalForecastRevenue)}</span>
+              </div>
+            </div>
+
+            {/* Termômetro bar */}
+            <div className="space-y-1.5">
+              <div className="w-full bg-white/10 rounded-full h-2.5 overflow-hidden flex">
+                <div
+                  className="bg-emerald-500 h-full transition-all duration-500"
+                  style={{ width: `${Math.min(totalGoal > 0 ? (totalSales / totalGoal) * 100 : 0, 100)}%` }}
+                  title="Realizado"
+                />
+                <div
+                  className="bg-blue-400 h-full transition-all duration-500"
+                  style={{ width: `${Math.min(totalGoal > 0 ? (weightedPipeline / totalGoal) * 100 : 0, 100)}%` }}
+                  title="Ponderado Aberto"
+                />
+              </div>
+              <div className="flex justify-between text-[11px] text-slate-300">
+                <span>Realizado: {goalProgress}%</span>
+                <span>Ponderado em Aberto: {totalGoal > 0 ? Math.round((weightedPipeline / totalGoal) * 100) : 0}%</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-4 mt-2 border-t border-white/10 flex items-center justify-between">
+            <span className="text-xs text-dusty-denim">
+              {opportunities.length} negociações ativas alimentadas pela equipe
+            </span>
+            <Link
+              href="/projecoes"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-white hover:text-dusty-denim transition-colors"
+            >
+              <span>Ver Forecast Trimestral & Meses Clicáveis</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Bloco Deadlines Críticos da Semana (5 colunas) */}
+        <div className="lg:col-span-5 bg-white border border-slate-300 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center">
+                  <Calendar className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-ink-black">Deadlines Críticos</h3>
+                  <p className="text-[11px] text-slate-500">Prazos de fechamento desta semana</p>
+                </div>
+              </div>
+
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
+                {upcomingDeadlines.length} próximos
+              </span>
+            </div>
+
+            <div className="divide-y divide-slate-200 mt-2">
+              {upcomingDeadlines.length === 0 ? (
+                <div className="py-6 text-center text-xs text-slate-400">
+                  <CheckCircle2 className="w-6 h-6 mx-auto mb-1 text-emerald-500 opacity-60" />
+                  Nenhum deadline pendente para esta semana.
+                </div>
+              ) : (
+                upcomingDeadlines.map((opp) => {
+                  const d = opp.expectedCloseDate ? new Date(opp.expectedCloseDate) : null;
+                  const isOverdue = d && d < now;
+
+                  return (
+                    <div key={opp.id} className="py-2.5 flex items-center justify-between gap-2 text-xs">
+                      <div className="min-w-0">
+                        <span className="font-bold text-ink-black block truncate">
+                          {opp.client.tradeName || opp.client.legalName}
+                        </span>
+                        <div className="flex items-center gap-1.5 text-[10px] text-slate-500">
+                          {opp.project && (
+                            <span className="font-bold text-purple-700 bg-purple-50 px-1.5 py-0.2 rounded">
+                              {opp.project.name}
+                            </span>
+                          )}
+                          <span className={isOverdue ? 'text-red-600 font-bold' : 'text-slate-600'}>
+                            {d ? d.toLocaleDateString('pt-BR') : 'Sem data'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="text-right flex-shrink-0">
+                        <span className="font-bold text-ink-black block">
+                          {formatCurrency(opp.estimatedValue)}
+                        </span>
+                        <span className="text-[10px] text-blue-600 font-semibold">
+                          {opp.probability}% conf.
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+
+          <div className="pt-3 border-t border-slate-200 text-right">
+            <Link
+              href="/projecoes"
+              className="text-xs font-bold text-blue-slate hover:text-deep-space inline-flex items-center gap-1"
+            >
+              <span>Abrir Calendário Completo</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </div>

@@ -15,24 +15,28 @@ export default function AppShell({ user, children }: AppShellProps) {
   const [selectedArea, setSelectedArea] = useState<AreaFilter>('all');
 
   return (
-    <div className="min-h-screen bg-slate-100 flex">
+    <div className="min-h-screen bg-slate-100 flex print:bg-white">
       {/* Sidebar */}
-      <Sidebar
-        user={user}
-        isOpen={sidebarOpen}
-        onCloseMobile={() => setSidebarOpen(false)}
-      />
+      <div className="print:hidden">
+        <Sidebar
+          user={user}
+          isOpen={sidebarOpen}
+          onCloseMobile={() => setSidebarOpen(false)}
+        />
+      </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 lg:pl-64">
-        <Topbar
-          user={user}
-          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-          currentArea={selectedArea}
-          onAreaChange={setSelectedArea}
-        />
+      <div className="flex-1 flex flex-col min-w-0 lg:pl-64 print:pl-0">
+        <div className="print:hidden">
+          <Topbar
+            user={user}
+            onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+            currentArea={selectedArea}
+            onAreaChange={setSelectedArea}
+          />
+        </div>
 
-        <main className="flex-1 p-6 sm:p-8 lg:p-10 max-w-7xl w-full mx-auto space-y-8">
+        <main className="flex-1 p-6 sm:p-8 lg:p-10 max-w-7xl w-full mx-auto space-y-8 print:p-2 print:max-w-none">
           {children}
         </main>
       </div>

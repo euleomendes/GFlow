@@ -47,6 +47,7 @@ export default async function ClientDetailPage({
         orderBy: { createdAt: 'desc' },
         include: {
           area: true,
+          project: { select: { id: true, name: true } },
           executive: {
             select: {
               id: true,
@@ -59,6 +60,7 @@ export default async function ClientDetailPage({
         orderBy: { closedAt: 'desc' },
         include: {
           area: true,
+          project: { select: { id: true, name: true } },
           executive: {
             select: {
               id: true,
