@@ -267,6 +267,14 @@ export default function OpportunitiesClient({
             >
               GPlus
             </button>
+            <button
+              onClick={() => setAreaFilter('redes_sociais')}
+              className={`px-2.5 py-1 rounded-md transition-colors ${
+                areaFilter === 'redes_sociais' ? 'bg-purple-600 text-white shadow-xs' : 'text-slate-600'
+              }`}
+            >
+              Redes Sociais
+            </button>
           </div>
         </div>
 
@@ -341,7 +349,9 @@ export default function OpportunitiesClient({
                           className={`text-[9px] font-bold px-1.5 py-0.2 rounded uppercase ${
                             opp.area.key === 'tv'
                               ? 'bg-blue-50 text-blue-700'
-                              : 'bg-emerald-50 text-emerald-700'
+                              : opp.area.key === 'gplus'
+                              ? 'bg-emerald-50 text-emerald-700'
+                              : 'bg-purple-50 text-purple-700'
                           }`}
                         >
                           {opp.area.name}
@@ -522,6 +532,7 @@ export default function OpportunitiesClient({
                   >
                     <option value="tv">TV Guararapes</option>
                     <option value="gplus">GPlus Digital</option>
+                    <option value="redes_sociais">Redes Sociais</option>
                   </select>
                 </div>
                 <div>

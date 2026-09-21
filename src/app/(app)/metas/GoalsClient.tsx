@@ -274,9 +274,10 @@ export default function GoalsClient({
                     onChange={(e) => setAreaKey(e.target.value)}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs"
                   >
-                    <option value="all">Geral (Ambas)</option>
+                    <option value="all">Geral (Todas)</option>
                     <option value="tv">TV Guararapes</option>
                     <option value="gplus">GPlus Digital</option>
+                    <option value="redes_sociais">Redes Sociais</option>
                   </select>
                 </div>
                 <div>

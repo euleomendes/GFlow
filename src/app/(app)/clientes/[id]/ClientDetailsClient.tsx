@@ -25,6 +25,7 @@ import {
   CheckCircle2,
   AlertCircle,
   Edit3,
+  Share2,
 } from 'lucide-react';
 import { AuthenticatedUser } from '@/types';
 
@@ -101,6 +102,7 @@ export default function ClientDetailsClient({
 
   const hasTV = client.areas.some((a: any) => a.area.key === 'tv');
   const hasGPlus = client.areas.some((a: any) => a.area.key === 'gplus');
+  const hasSocial = client.areas.some((a: any) => a.area.key === 'redes_sociais');
 
   const totalSales = client.sales.reduce((acc: number, curr: any) => acc + curr.value, 0);
   const totalPipeline = client.opportunities
@@ -273,6 +275,12 @@ export default function ClientDetailsClient({
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                       <Layers className="w-3 h-3" />
                       <span>GPlus</span>
+                    </span>
+                  )}
+                  {hasSocial && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-50 text-purple-700 border border-purple-200">
+                      <Share2 className="w-3 h-3" />
+                      <span>Redes Sociais</span>
                     </span>
                   )}
                 </div>
@@ -1126,6 +1134,15 @@ export default function ClientDetailsClient({
                       className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500"
                     />
                     <span className="font-semibold text-slate-800">GPlus Digital</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editAreaKeys.includes('redes_sociais')}
+                      onChange={() => toggleEditAreaKey('redes_sociais')}
+                      className="w-4 h-4 rounded text-purple-600 focus:ring-purple-500"
+                    />
+                    <span className="font-semibold text-slate-800">Redes Sociais</span>
                   </label>
                 </div>
               </div>

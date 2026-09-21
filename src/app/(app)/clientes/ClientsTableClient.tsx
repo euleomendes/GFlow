@@ -20,6 +20,7 @@ import {
   TrendingUp,
   DollarSign,
   CalendarCheck,
+  Share2,
 } from 'lucide-react';
 import { AuthenticatedUser } from '@/types';
 
@@ -143,11 +144,13 @@ export default function ClientsTableClient({
     const clientAreaKeys = c.areas.map((a: any) => a.area.key);
     let matchesArea = true;
     if (selectedArea === 'tv') {
-      matchesArea = clientAreaKeys.includes('tv') && !clientAreaKeys.includes('gplus');
+      matchesArea = clientAreaKeys.includes('tv');
     } else if (selectedArea === 'gplus') {
-      matchesArea = clientAreaKeys.includes('gplus') && !clientAreaKeys.includes('tv');
+      matchesArea = clientAreaKeys.includes('gplus');
+    } else if (selectedArea === 'redes_sociais') {
+      matchesArea = clientAreaKeys.includes('redes_sociais');
     } else if (selectedArea === 'both') {
-      matchesArea = clientAreaKeys.includes('tv') && clientAreaKeys.includes('gplus');
+      matchesArea = clientAreaKeys.length > 1;
     }
 
     const matchesStatus = selectedStatus === 'ALL' || c.status === selectedStatus;
@@ -236,7 +239,7 @@ export default function ClientsTableClient({
                   : 'text-slate-600 hover:text-blue-700'
               }`}
             >
-              Apenas TV
+              TV
             </button>
             <button
               onClick={() => setSelectedArea('gplus')}
@@ -246,17 +249,27 @@ export default function ClientsTableClient({
                   : 'text-slate-600 hover:text-emerald-700'
               }`}
             >
-              Apenas GPlus
+              GPlus
+            </button>
+            <button
+              onClick={() => setSelectedArea('redes_sociais')}
+              className={`px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors ${
+                selectedArea === 'redes_sociais'
+                  ? 'bg-purple-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-purple-700'
+              }`}
+            >
+              Redes Sociais
             </button>
             <button
               onClick={() => setSelectedArea('both')}
               className={`px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors ${
                 selectedArea === 'both'
-                  ? 'bg-purple-600 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-purple-700'
+                  ? 'bg-slate-800 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-800'
               }`}
             >
-              TV + GPlus
+              Multi-Área
             </button>
           </div>
 
@@ -320,6 +333,7 @@ export default function ClientsTableClient({
                 filteredClients.map((client) => {
                   const hasTV = client.areas.some((a: any) => a.area.key === 'tv');
                   const hasGPlus = client.areas.some((a: any) => a.area.key === 'gplus');
+                  const hasSocial = client.areas.some((a: any) => a.area.key === 'redes_sociais');
 
                   return (
                     <tr
@@ -353,7 +367,13 @@ export default function ClientsTableClient({
                               <span>GPlus</span>
                             </span>
                           )}
-                          {!hasTV && !hasGPlus && (
+                          {hasSocial && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200/60">
+                              <Share2 className="w-2.5 h-2.5" />
+                              <span>Redes</span>
+                            </span>
+                          )}
+                          {!hasTV && !hasGPlus && !hasSocial && (
                             <span className="text-[10px] text-slate-400 italic">Não definida</span>
                           )}
                         </div>
@@ -534,12 +554,25 @@ export default function ClientsTableClient({
                     />
                     <span className="font-semibold text-slate-800 flex items-center gap-1">
                       <Layers className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>GPlus Digital (Multiplataforma)</span>
+                      <span>GPlus Digital</span>
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={areaKeys.includes('redes_sociais')}
+                      onChange={() => toggleAreaKey('redes_sociais')}
+                      className="w-4 h-4 rounded text-purple-600 focus:ring-purple-500 border-slate-300"
+                    />
+                    <span className="font-semibold text-slate-800 flex items-center gap-1">
+                      <Share2 className="w-3.5 h-3.5 text-purple-600" />
+                      <span>Redes Sociais</span>
                     </span>
                   </label>
                 </div>
                 <p className="text-[10px] text-slate-500">
-                  Um cliente pode comprar simultaneamente na TV e no GPlus.
+                  Um cliente pode comprar simultaneamente na TV, no GPlus e nas Redes Sociais.
                 </p>
               </div>
 

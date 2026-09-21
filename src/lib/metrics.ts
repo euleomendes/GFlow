@@ -162,6 +162,7 @@ export function calculateFunnelMetrics(opportunities: { stage: string; estimated
 export function calculateCrossSellingAnalysis(clients: ClientAreaMetricInput[]) {
   const tvOnly: ClientAreaMetricInput[] = [];
   const gplusOnly: ClientAreaMetricInput[] = [];
+  const socialOnly: ClientAreaMetricInput[] = [];
   const hybrid: ClientAreaMetricInput[] = [];
   const noArea: ClientAreaMetricInput[] = [];
 
@@ -169,13 +170,18 @@ export function calculateCrossSellingAnalysis(clients: ClientAreaMetricInput[]) 
     const keys = client.areaKeys.map((k) => k.toLowerCase());
     const hasTv = keys.includes('tv');
     const hasGPlus = keys.includes('gplus');
+    const hasSocial = keys.includes('redes_sociais') || keys.includes('social');
 
-    if (hasTv && hasGPlus) {
+    const activeAreaCount = [hasTv, hasGPlus, hasSocial].filter(Boolean).length;
+
+    if (activeAreaCount > 1) {
       hybrid.push(client);
     } else if (hasTv) {
       tvOnly.push(client);
     } else if (hasGPlus) {
       gplusOnly.push(client);
+    } else if (hasSocial) {
+      socialOnly.push(client);
     } else {
       noArea.push(client);
     }
@@ -185,17 +191,22 @@ export function calculateCrossSellingAnalysis(clients: ClientAreaMetricInput[]) 
     tvOnly: {
       count: tvOnly.length,
       clients: tvOnly,
-      label: 'Clientes TV somente (Oportunidade para expansão GPlus Digital)',
+      label: 'Clientes TV somente (Oportunidade para expansão GPlus e Redes)',
     },
     gplusOnly: {
       count: gplusOnly.length,
       clients: gplusOnly,
-      label: 'Clientes GPlus somente (Oportunidade para expansão TV Aberta 9.1)',
+      label: 'Clientes GPlus somente (Oportunidade para expansão TV e Redes)',
+    },
+    socialOnly: {
+      count: socialOnly.length,
+      clients: socialOnly,
+      label: 'Clientes Redes Sociais somente',
     },
     hybrid: {
       count: hybrid.length,
       clients: hybrid,
-      label: 'Clientes Híbridos (TV + GPlus simultâneos)',
+      label: 'Clientes Híbridos / Multi-Área (TV, GPlus e Redes)',
     },
     totalClients: clients.length,
   };
@@ -363,7 +374,7 @@ export interface ExecutiveDistributionResult {
 
 /**
  * DISTRIBUIÇÃO DE FATURAMENTO POR ÁREA (PIZZA / DONUT)
- * Calcula percentuais e valores de vendas entre TV Guararapes e Digital GPlus.
+ * Calcula percentuais e valores de vendas entre TV Guararapes, Digital GPlus e Redes Sociais.
  */
 export function calculateExecutiveDistribution(
   sales: { value: number; status?: string; area?: { key: string; name: string } | null }[]
@@ -376,12 +387,17 @@ export function calculateExecutiveDistribution(
   let tvCount = 0;
   let gplusValue = 0;
   let gplusCount = 0;
+  let socialValue = 0;
+  let socialCount = 0;
 
   for (const s of validSales) {
     const key = s.area?.key?.toLowerCase();
     if (key === 'gplus') {
       gplusValue += s.value || 0;
       gplusCount += 1;
+    } else if (key === 'redes_sociais' || key === 'social') {
+      socialValue += s.value || 0;
+      socialCount += 1;
     } else {
       // Default to TV
       tvValue += s.value || 0;
@@ -391,6 +407,7 @@ export function calculateExecutiveDistribution(
 
   const tvPercentage = totalRevenue > 0 ? parseFloat(((tvValue / totalRevenue) * 100).toFixed(1)) : 0;
   const gplusPercentage = totalRevenue > 0 ? parseFloat(((gplusValue / totalRevenue) * 100).toFixed(1)) : 0;
+  const socialPercentage = totalRevenue > 0 ? parseFloat(((socialValue / totalRevenue) * 100).toFixed(1)) : 0;
 
   const items: AreaDistributionItem[] = [
     {
@@ -408,6 +425,14 @@ export function calculateExecutiveDistribution(
       percentage: gplusPercentage,
       count: gplusCount,
       color: '#059669', // Verde Esmeralda Multiplataforma
+    },
+    {
+      key: 'redes_sociais',
+      name: 'Redes Sociais',
+      value: socialValue,
+      percentage: socialPercentage,
+      count: socialCount,
+      color: '#9333EA', // Roxo / Violeta
     },
   ];
 

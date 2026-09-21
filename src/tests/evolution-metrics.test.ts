@@ -34,26 +34,28 @@ if (!sepMonth || sepMonth.realizedRevenue !== 240000 || sepMonth.targetGoal !== 
 console.log('September attainment:', sepMonth.attainmentPercent, '%');
 console.log('MoM growth:', evolution.momGrowth);
 
-// Test 2: calculateExecutiveDistribution
+// Test 2: calculateExecutiveDistribution (TV, GPlus e Redes Sociais)
 const dist = calculateExecutiveDistribution([
   { value: 150000, area: { key: 'tv', name: 'TV' } },
   { value: 50000, area: { key: 'gplus', name: 'GPlus' } },
+  { value: 50000, area: { key: 'redes_sociais', name: 'Redes Sociais' } },
 ]);
 
 console.log('Total revenue:', dist.totalRevenue);
 console.log('Distribution items:', dist.items);
 
-if (dist.totalRevenue !== 200000) {
-  console.error('Expected totalRevenue 200000, got', dist.totalRevenue);
+if (dist.totalRevenue !== 250000) {
+  console.error('Expected totalRevenue 250000, got', dist.totalRevenue);
   process.exit(1);
 }
 
 const tvItem = dist.items.find((i) => i.key === 'tv');
 const gplusItem = dist.items.find((i) => i.key === 'gplus');
+const socialItem = dist.items.find((i) => i.key === 'redes_sociais');
 
-if (tvItem?.percentage !== 75 || gplusItem?.percentage !== 25) {
-  console.error('Percentages mismatch:', tvItem?.percentage, gplusItem?.percentage);
+if (tvItem?.percentage !== 60 || gplusItem?.percentage !== 20 || socialItem?.percentage !== 20) {
+  console.error('Percentages mismatch:', tvItem?.percentage, gplusItem?.percentage, socialItem?.percentage);
   process.exit(1);
 }
 
-console.log('✅ ALL EVOLUTION AND DISTRIBUTION METRICS TESTS PASSED!');
+console.log('✅ ALL EVOLUTION AND DISTRIBUTION METRICS TESTS PASSED (TV, GPLUS & REDES SOCIAIS)!');

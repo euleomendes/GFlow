@@ -88,6 +88,7 @@ export default async function DashboardPage({
   const areas = await prisma.area.findMany();
   const tvArea = areas.find((a) => a.key === 'tv');
   const gplusArea = areas.find((a) => a.key === 'gplus');
+  const socialArea = areas.find((a) => a.key === 'redes_sociais');
 
   // Filtros aplicados baseados no perfil e query param
   const areaFilter =
@@ -95,6 +96,8 @@ export default async function DashboardPage({
       ? { areaId: tvArea.id }
       : selectedAreaKey === 'gplus' && gplusArea
       ? { areaId: gplusArea.id }
+      : selectedAreaKey === 'redes_sociais' && socialArea
+      ? { areaId: socialArea.id }
       : {};
 
   const userFilter = effectiveExecutiveId ? { executiveId: effectiveExecutiveId } : {};
@@ -123,6 +126,8 @@ export default async function DashboardPage({
         ? { areaId: tvArea.id }
         : selectedAreaKey === 'gplus' && gplusArea
         ? { areaId: gplusArea.id }
+        : selectedAreaKey === 'redes_sociais' && socialArea
+        ? { areaId: socialArea.id }
         : {}),
       ...(effectiveExecutiveId ? { executiveId: effectiveExecutiveId } : {}),
     },

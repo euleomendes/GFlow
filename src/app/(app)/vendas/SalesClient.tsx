@@ -71,6 +71,7 @@ export default function SalesClient({
   const avgTicket = filteredSales.length > 0 ? totalRevenue / filteredSales.length : 0;
   const tvRevenue = filteredSales.filter((s) => s.area.key === 'tv').reduce((acc, curr) => acc + curr.value, 0);
   const gplusRevenue = filteredSales.filter((s) => s.area.key === 'gplus').reduce((acc, curr) => acc + curr.value, 0);
+  const socialRevenue = filteredSales.filter((s) => s.area.key === 'redes_sociais').reduce((acc, curr) => acc + curr.value, 0);
 
   const handleCreateSale = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,11 +109,11 @@ export default function SalesClient({
 
   return (
     <div className="space-y-4">
-      {/* Metrics Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      {/* Metric Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         <div className="bg-white border border-slate-200/80 rounded-xl p-4 shadow-xs">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            Faturamento Fechado
+            Faturamento Total
           </span>
           <div className="text-xl font-black text-slate-900 mt-1">
             {formatCurrency(totalRevenue)}
@@ -122,7 +123,7 @@ export default function SalesClient({
 
         <div className="bg-white border border-blue-100 bg-blue-50/20 rounded-xl p-4 shadow-xs">
           <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600">
-            Vendas TV Guararapes
+            Vendas TV
           </span>
           <div className="text-xl font-black text-blue-900 mt-1">
             {formatCurrency(tvRevenue)}
@@ -132,12 +133,22 @@ export default function SalesClient({
 
         <div className="bg-white border border-emerald-100 bg-emerald-50/20 rounded-xl p-4 shadow-xs">
           <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600">
-            Vendas GPlus Digital
+            Vendas GPlus
           </span>
           <div className="text-xl font-black text-emerald-900 mt-1">
             {formatCurrency(gplusRevenue)}
           </div>
           <p className="text-[11px] text-emerald-500">Multiplataforma</p>
+        </div>
+
+        <div className="bg-white border border-purple-100 bg-purple-50/20 rounded-xl p-4 shadow-xs">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-purple-600">
+            Vendas Redes Sociais
+          </span>
+          <div className="text-xl font-black text-purple-900 mt-1">
+            {formatCurrency(socialRevenue)}
+          </div>
+          <p className="text-[11px] text-purple-500">Instagram, TikTok, YT</p>
         </div>
 
         <div className="bg-white border border-slate-200/80 rounded-xl p-4 shadow-xs">
@@ -147,7 +158,7 @@ export default function SalesClient({
           <div className="text-xl font-black text-slate-900 mt-1">
             {formatCurrency(avgTicket)}
           </div>
-          <p className="text-[11px] text-slate-500">por contrato fechado</p>
+          <p className="text-[11px] text-slate-500">por contrato</p>
         </div>
       </div>
 
@@ -189,6 +200,14 @@ export default function SalesClient({
               }`}
             >
               GPlus
+            </button>
+            <button
+              onClick={() => setAreaFilter('redes_sociais')}
+              className={`px-2.5 py-1 rounded-md transition-colors ${
+                areaFilter === 'redes_sociais' ? 'bg-purple-600 text-white shadow-xs' : 'text-slate-600'
+              }`}
+            >
+              Redes Sociais
             </button>
           </div>
         </div>
@@ -239,7 +258,9 @@ export default function SalesClient({
                       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                         sale.area.key === 'tv'
                           ? 'bg-blue-50 text-blue-700'
-                          : 'bg-emerald-50 text-emerald-700'
+                          : sale.area.key === 'gplus'
+                          ? 'bg-emerald-50 text-emerald-700'
+                          : 'bg-purple-50 text-purple-700'
                       }`}
                     >
                       {sale.area.name}
@@ -306,6 +327,7 @@ export default function SalesClient({
                   >
                     <option value="tv">TV Guararapes</option>
                     <option value="gplus">GPlus Digital</option>
+                    <option value="redes_sociais">Redes Sociais</option>
                   </select>
                 </div>
                 <div>

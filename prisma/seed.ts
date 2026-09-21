@@ -27,7 +27,20 @@ async function main() {
     },
   });
 
-  console.log('✓ Áreas criadas: TV e GPlus');
+  const areaSocial = await prisma.area.upsert({
+    where: { key: 'redes_sociais' },
+    update: {
+      name: 'Redes Sociais',
+      description: 'Redes Sociais & Conteúdo Digital (Instagram, TikTok, YouTube, etc.)',
+    },
+    create: {
+      key: 'redes_sociais',
+      name: 'Redes Sociais',
+      description: 'Redes Sociais & Conteúdo Digital (Instagram, TikTok, YouTube, etc.)',
+    },
+  });
+
+  console.log('✓ Áreas criadas: TV, GPlus e Redes Sociais');
 
   // 2. Criar Roles
   const managerRole = await prisma.role.upsert({

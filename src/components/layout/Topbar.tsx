@@ -9,6 +9,7 @@ import {
   LogOut,
   Tv,
   Layers,
+  Share2,
   Sparkles,
   ShieldAlert,
 } from 'lucide-react';
@@ -117,6 +118,18 @@ export default function Topbar({
           >
             <Layers className="w-3 h-3" />
             <span>GPlus</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => onAreaChange?.('redes_sociais')}
+            className={`flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${
+              currentArea === 'redes_sociais'
+                ? 'bg-purple-600 text-white shadow-xs'
+                : 'text-deep-space/70 hover:text-purple-600'
+            }`}
+          >
+            <Share2 className="w-3 h-3" />
+            <span>Redes Sociais</span>
           </button>
         </div>
 

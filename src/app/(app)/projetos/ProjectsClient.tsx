@@ -15,6 +15,7 @@ import {
   DollarSign,
   ChevronRight,
   AlertCircle,
+  Share2,
 } from 'lucide-react';
 import { AuthenticatedUser } from '@/types';
 
@@ -111,6 +112,7 @@ export default function ProjectsClient({
     let matchesArea = true;
     if (areaFilter === 'tv') matchesArea = projectAreas.includes('tv');
     if (areaFilter === 'gplus') matchesArea = projectAreas.includes('gplus');
+    if (areaFilter === 'redes_sociais') matchesArea = projectAreas.includes('redes_sociais');
 
     return matchesSearch && matchesArea;
   });
@@ -156,6 +158,14 @@ export default function ProjectsClient({
             >
               GPlus
             </button>
+            <button
+              onClick={() => setAreaFilter('redes_sociais')}
+              className={`px-2.5 py-1 rounded-md transition-colors ${
+                areaFilter === 'redes_sociais' ? 'bg-purple-600 text-white shadow-xs' : 'text-slate-600'
+              }`}
+            >
+              Redes Sociais
+            </button>
           </div>
         </div>
 
@@ -176,6 +186,7 @@ export default function ProjectsClient({
         {filteredProjects.map((p) => {
           const hasTV = p.areas.some((a: any) => a.area.key === 'tv');
           const hasGPlus = p.areas.some((a: any) => a.area.key === 'gplus');
+          const hasSocial = p.areas.some((a: any) => a.area.key === 'redes_sociais');
 
           return (
             <div
@@ -195,6 +206,12 @@ export default function ProjectsClient({
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
                         <Layers className="w-2.5 h-2.5" />
                         <span>GPlus</span>
+                      </span>
+                    )}
+                    {hasSocial && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-purple-50 text-purple-700 border border-purple-200">
+                        <Share2 className="w-2.5 h-2.5" />
+                        <span>Redes</span>
                       </span>
                     )}
                   </div>
@@ -305,6 +322,15 @@ export default function ProjectsClient({
                       className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500"
                     />
                     <span className="font-semibold text-slate-800">GPlus Digital</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={areaKeys.includes('redes_sociais')}
+                      onChange={() => toggleAreaKey('redes_sociais')}
+                      className="w-4 h-4 rounded text-purple-600 focus:ring-purple-500"
+                    />
+                    <span className="font-semibold text-slate-800">Redes Sociais</span>
                   </label>
                 </div>
               </div>

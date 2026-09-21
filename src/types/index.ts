@@ -13,7 +13,7 @@ export interface AuthenticatedUser {
   } | null;
 }
 
-export type AreaFilter = 'all' | 'tv' | 'gplus';
+export type AreaFilter = 'all' | 'tv' | 'gplus' | 'redes_sociais';
 
 export interface AuditLogData {
   actorUserId?: string | null;

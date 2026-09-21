@@ -503,6 +503,15 @@ export default function ProjectionsClient({
             >
               GPlus Digital
             </button>
+            <button
+              type="button"
+              onClick={() => setAreaKey('redes_sociais')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-bold ${
+                areaKey === 'redes_sociais' ? 'bg-purple-600 text-white shadow-xs' : 'text-slate-600'
+              }`}
+            >
+              Redes Sociais
+            </button>
           </div>
 
           {/* Executive Filter (Manager only) */}
@@ -863,7 +872,9 @@ export default function ProjectionsClient({
                                 className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                                   opp.area.key === 'tv'
                                     ? 'bg-blue-50 text-blue-700'
-                                    : 'bg-emerald-50 text-emerald-700'
+                                    : opp.area.key === 'gplus'
+                                    ? 'bg-emerald-50 text-emerald-700'
+                                    : 'bg-purple-50 text-purple-700'
                                 }`}
                               >
                                 {opp.area.name}
@@ -1572,6 +1583,7 @@ export default function ProjectionsClient({
                   >
                     <option value="tv">TV Guararapes</option>
                     <option value="gplus">GPlus Digital</option>
+                    <option value="redes_sociais">Redes Sociais</option>
                   </select>
                 </div>
               </div>
