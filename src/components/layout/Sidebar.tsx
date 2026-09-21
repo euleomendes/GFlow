@@ -83,8 +83,8 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
         onClick={onCloseMobile}
         className={`group flex items-center justify-between px-3 py-2 text-xs font-medium rounded-lg transition-all ${
           isActive
-            ? 'bg-blue-slate/40 text-white font-semibold border-l-2 border-dusty-denim rounded-l-none shadow-xs'
-            : 'text-slate-300 hover:text-white hover:bg-deep-space/50'
+            ? 'bg-blue-slate/50 text-white font-semibold rounded-lg shadow-sm border-l-2 border-dusty-denim'
+            : 'text-slate-300 hover:text-white hover:bg-white/10'
         }`}
       >
         <div className="flex items-center gap-2.5 min-w-0">
@@ -107,12 +107,12 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
       )}
 
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-ink-black border-r border-deep-space/70 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-ink-black border-r border-dusty-denim/20 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Brand Header */}
-        <div className="h-16 flex items-center px-5 border-b border-deep-space/80 gap-3">
+        <div className="h-16 flex items-center px-5 border-b border-dusty-denim/20 gap-3">
           <div className="w-8 h-8 rounded-lg bg-deep-space border border-blue-slate/40 text-white font-black text-sm flex items-center justify-center shadow-xs">
             GF
           </div>
@@ -127,7 +127,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
         </div>
 
         {/* Navigation items */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-4">
           {/* Main Dashboard */}
           <div>
             {renderNavLink({
@@ -138,7 +138,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
           </div>
 
           {/* Comercial */}
-          <div>
+          <div className="pt-4 border-t border-white/10">
             <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim/75">
               Comercial
             </div>
@@ -146,7 +146,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
           </div>
 
           {/* Projetos */}
-          <div>
+          <div className="pt-4 border-t border-white/10">
             <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim/75">
               Projetos
             </div>
@@ -154,7 +154,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
           </div>
 
           {/* Biblioteca */}
-          <div>
+          <div className="pt-4 border-t border-white/10">
             <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim/75">
               Biblioteca
             </div>
@@ -163,7 +163,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
 
           {/* Marketing - Apenas se Gerente ou perfil MKT */}
           {isManager && (
-            <div>
+            <div className="pt-4 border-t border-white/10">
               <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim/75">
                 Marketing
               </div>
@@ -173,7 +173,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
 
           {/* Relatórios */}
           {isManager && (
-            <div>
+            <div className="pt-4 border-t border-white/10">
               <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim/75">
                 Inteligência
               </div>
@@ -189,7 +189,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
 
           {/* Administração - Exclusivo Gerente / Admin */}
           {isManager && (
-            <div>
+            <div className="pt-4 border-t border-white/10">
               <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim/75">
                 Administração
               </div>
@@ -199,7 +199,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
         </div>
 
         {/* User Card footer */}
-        <div className="p-3 border-t border-deep-space/80 bg-deep-space/40">
+        <div className="p-3 border-t border-white/10 bg-deep-space/40">
           <div className="flex items-center gap-3 px-2 py-1.5">
             <div className="w-8 h-8 rounded-full bg-blue-slate text-white flex items-center justify-center font-bold text-xs shadow-xs">
               {user.name.slice(0, 2).toUpperCase()}

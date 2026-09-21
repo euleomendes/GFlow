@@ -51,7 +51,7 @@ export default function Topbar({
   };
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-30 h-16 bg-white/95 backdrop-blur-md border-b border-gray-200 px-6 sm:px-8 flex items-center justify-between gap-4">
       {/* Left side: Hamburger & Global Search */}
       <div className="flex items-center gap-3 flex-1 max-w-xl">
         <button
@@ -73,7 +73,7 @@ export default function Topbar({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar clientes, projetos, valorações ou arquivos..."
-            className="w-full pl-9 pr-3 py-1.5 bg-slate-100/80 hover:bg-slate-100 focus:bg-white border border-transparent focus:border-blue-slate/40 rounded-lg text-xs text-ink-black placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-slate/20 transition-all"
+            className="w-full pl-9 pr-3 py-1.5 bg-gray-50 hover:bg-gray-100/80 focus:bg-white border border-gray-200 focus:border-blue-slate/40 rounded-lg text-xs text-ink-black placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-slate/20 transition-all"
           />
         </form>
       </div>
@@ -81,7 +81,7 @@ export default function Topbar({
       {/* Right side: Area Switcher + Notifications + Profile */}
       <div className="flex items-center gap-2 sm:gap-4">
         {/* Area Toggle Pills (TV / GPlus / Todos) */}
-        <div className="hidden md:flex items-center bg-slate-100/90 p-0.5 rounded-lg border border-slate-200/70">
+        <div className="hidden md:flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200">
           <button
             type="button"
             onClick={() => onAreaChange?.('all')}
@@ -131,7 +131,7 @@ export default function Topbar({
         </button>
 
         {/* User Pill */}
-        <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+        <div className="flex items-center gap-2 pl-4 border-l border-gray-200">
           <div className="hidden sm:block text-right">
             <div className="text-xs font-bold text-ink-black leading-tight">
               {user.name.split(' ')[0]}
