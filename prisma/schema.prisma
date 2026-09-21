@@ -1,0 +1,522 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id          String           @id @default(cuid())
+  name        String
+  key         String           @unique // "manager", "executive"
+  description String?
+  createdAt   DateTime         @default(now())
+  users       User[]
+  permissions RolePermission[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String           @id @default(cuid())
+  name        String
+  key         String           @unique
+  description String?
+  createdAt   DateTime         @default(now())
+  roles       RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  id           String     @id @default(cuid())
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model User {
+  id           String            @id @default(cuid())
+  name         String
+  email        String            @unique
+  passwordHash String
+  roleId       String
+  status       String            @default("ACTIVE") // "ACTIVE", "INACTIVE", "BLOCKED"
+  avatarUrl    String?
+  lastLoginAt  DateTime?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  role         Role              @relation(fields: [roleId], references: [id])
+  executive    ExecutiveProfile?
+
+  responsibleClients Client[]        @relation("ResponsibleUser")
+  opportunities      Opportunity[]   @relation("ExecutiveOpportunities")
+  sales              Sale[]          @relation("ExecutiveSales")
+  visits             Visit[]         @relation("ExecutiveVisits")
+  goals              Goal[]          @relation("ExecutiveGoals")
+  uploadedFiles      File[]          @relation("UploadedByUser")
+  fileVersions       FileVersion[]   @relation("VersionUploadedBy")
+  auditLogs          AuditLog[]      @relation("ActorUser")
+  trashItems         TrashItem[]     @relation("DeletedByUser")
+  favorites          Favorite[]
+  notifications      Notification[]
+  agendaEvents       AgendaEvent[]
+
+  @@map("users")
+}
+
+model ExecutiveProfile {
+  id        String    @id @default(cuid())
+  userId    String    @unique
+  phone     String?
+  code      String?   @unique
+  hireDate  DateTime?
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("executive_profiles")
+}
+
+model Area {
+  id           String          @id @default(cuid())
+  name         String          @unique // "TV", "GPlus"
+  key          String          @unique // "tv", "gplus"
+  description  String?
+  createdAt    DateTime        @default(now())
+  clientAreas  ClientArea[]
+  projectAreas ProjectArea[]
+  opportunities Opportunity[]
+  sales        Sale[]
+  goals        Goal[]
+
+  @@map("areas")
+}
+
+model Client {
+  id                String          @id @default(cuid())
+  legalName         String
+  tradeName         String
+  cnpj              String?         @unique
+  segment           String?
+  city              String?
+  state             String?
+  address           String?
+  phone             String?
+  website           String?
+  status            String          @default("PROSPECT") // "PROSPECT", "ACTIVE", "INACTIVE", "LOST"
+  potential         String          @default("MEDIUM")   // "LOW", "MEDIUM", "HIGH", "STRATEGIC"
+  responsibleUserId String?
+  notes             String?
+  createdById       String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  deletedAt         DateTime?
+
+  responsibleUser User?           @relation("ResponsibleUser", fields: [responsibleUserId], references: [id])
+  contacts        ClientContact[]
+  areas           ClientArea[]
+  opportunities   Opportunity[]
+  sales           Sale[]
+  visits          Visit[]
+  files           File[]
+  agendaEvents    AgendaEvent[]
+
+  @@map("clients")
+}
+
+model ClientContact {
+  id        String   @id @default(cuid())
+  clientId  String
+  name      String
+  roleTitle String?
+  email     String?
+  phone     String?
+  isPrimary Boolean  @default(false)
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("client_contacts")
+}
+
+model ClientArea {
+  id       String @id @default(cuid())
+  clientId String
+  areaId   String
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  area     Area   @relation(fields: [areaId], references: [id], onDelete: Cascade)
+
+  @@unique([clientId, areaId])
+  @@map("client_areas")
+}
+
+model Project {
+  id                String    @id @default(cuid())
+  name              String
+  description       String?
+  status            String    @default("PLANNING") // "PLANNING", "ACTIVE", "COMPLETED", "ARCHIVED"
+  startDate         DateTime?
+  endDate           DateTime?
+  responsibleUserId String?
+  totalValuation    Float?    @default(0)
+  createdById       String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+
+  areas         ProjectArea[]
+  folders       ProjectFolder[]
+  files         File[]
+  valuations    Valuation[]
+  opportunities Opportunity[]
+  sales         Sale[]
+
+  @@map("projects")
+}
+
+model ProjectArea {
+  id        String  @id @default(cuid())
+  projectId String
+  areaId    String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  area      Area    @relation(fields: [areaId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, areaId])
+  @@map("project_areas")
+}
+
+model ProjectFolder {
+  id             String          @id @default(cuid())
+  projectId      String
+  parentFolderId String?
+  name           String
+  createdById    String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  deletedAt      DateTime?
+
+  project      Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  parentFolder ProjectFolder?  @relation("SubFolders", fields: [parentFolderId], references: [id])
+  subFolders   ProjectFolder[] @relation("SubFolders")
+  files        File[]
+
+  @@map("project_folders")
+}
+
+model File {
+  id               String      @id @default(cuid())
+  name             String
+  description      String?
+  mimeType         String
+  extension        String
+  size             Int
+  storageKey       String
+  scope            String      @default("COMMERCIAL") // "COMMERCIAL", "MARKETING", "CLIENT", "PROPOSAL", "BRAND", "INSTITUTIONAL", "CAMPAIGN"
+  category         String?     // "LOGO_PRINCIPAL", "LOGO_HORIZONTAL", "LOGO_VERTICAL", "LOGO_NEGATIVA", "LOGO_POSITIVA", "FAVICON", "ICONES", "TEMPLATES", "MANUAL_MARCA", "CAMPANHA", "INSTITUCIONAL"
+  brandKey         String?     // "tv" | "gplus"
+  projectId        String?
+  folderId         String?
+  clientId         String?
+  uploadedById     String
+  currentVersionId String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  deletedAt        DateTime?
+
+  uploadedBy User           @relation("UploadedByUser", fields: [uploadedById], references: [id])
+  project    Project?       @relation(fields: [projectId], references: [id])
+  folder     ProjectFolder? @relation(fields: [folderId], references: [id])
+  client     Client?        @relation(fields: [clientId], references: [id])
+  versions   FileVersion[]
+  favorites  Favorite[]
+
+  @@map("files")
+}
+
+model FileVersion {
+  id            String   @id @default(cuid())
+  fileId        String
+  versionNumber Int
+  storageKey    String
+  size          Int
+  checksum      String?
+  uploadedById  String
+  changeNote    String?
+  createdAt     DateTime @default(now())
+
+  file       File @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  uploadedBy User @relation("VersionUploadedBy", fields: [uploadedById], references: [id])
+
+  @@map("file_versions")
+}
+
+model Valuation {
+  id             String    @id @default(cuid())
+  projectId      String
+  title          String
+  totalValue     Float     @default(0)
+  validFrom      DateTime?
+  validTo        DateTime?
+  officialFileId String?
+  notes          String?
+  createdById    String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+
+  project Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  items   ValuationItem[]
+
+  @@map("valuations")
+}
+
+model ValuationItem {
+  id           String   @id @default(cuid())
+  valuationId  String
+  product      String
+  quantity     Int      @default(1)
+  unitValue    Float    @default(0)
+  totalValue   Float    @default(0)
+  deliverables String?
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  valuation Valuation @relation(fields: [valuationId], references: [id], onDelete: Cascade)
+
+  @@map("valuation_items")
+}
+
+model Opportunity {
+  id                String    @id @default(cuid())
+  clientId          String
+  executiveId       String
+  areaId            String
+  projectId         String?
+  stage             String    @default("LEAD") // "LEAD", "CONTACT", "MEETING", "PROPOSAL", "NEGOTIATION", "CLOSED_WON", "CLOSED_LOST"
+  estimatedValue    Float     @default(0)
+  probability       Int       @default(10) // 0-100%
+  expectedCloseDate DateTime?
+  source            String?
+  nextStep          String?
+  notes             String?
+  status            String    @default("OPEN") // "OPEN", "WON", "LOST"
+  createdById       String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+
+  client    Client     @relation(fields: [clientId], references: [id])
+  executive User       @relation("ExecutiveOpportunities", fields: [executiveId], references: [id])
+  area      Area       @relation(fields: [areaId], references: [id])
+  project   Project?   @relation(fields: [projectId], references: [id])
+  proposals Proposal[]
+  sales     Sale[]
+
+  @@map("opportunities")
+}
+
+model Proposal {
+  id            String   @id @default(cuid())
+  opportunityId String
+  versionNumber Int      @default(1)
+  value         Float    @default(0)
+  status        String   @default("DRAFT") // "DRAFT", "SENT", "UNDER_NEGOTIATION", "APPROVED", "REJECTED", "EXPIRED"
+  fileId        String?
+  notes         String?
+  createdById   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  opportunity Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+
+  @@map("proposals")
+}
+
+model Sale {
+  id            String    @id @default(cuid())
+  opportunityId String?
+  clientId      String
+  executiveId   String
+  areaId        String
+  projectId     String?
+  value         Float     @default(0)
+  closedAt      DateTime  @default(now())
+  status        String    @default("ACTIVE")
+  reference     String?
+  notes         String?
+  createdById   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  opportunity Opportunity? @relation(fields: [opportunityId], references: [id])
+  client      Client       @relation(fields: [clientId], references: [id])
+  executive   User         @relation("ExecutiveSales", fields: [executiveId], references: [id])
+  area        Area         @relation(fields: [areaId], references: [id])
+  project     Project?     @relation(fields: [projectId], references: [id])
+
+  @@map("sales")
+}
+
+model Visit {
+  id               String    @id @default(cuid())
+  clientId         String
+  executiveId      String
+  visitDate        DateTime  @default(now())
+  startTime        String?
+  visitType        String    @default("IN_PERSON") // "IN_PERSON", "ONLINE", "PHONE", "EVENT", "OTHER"
+  objective        String?
+  participants     String?
+  discussion       String?
+  needs            String?
+  opportunityId    String?
+  hasOpportunity   Boolean   @default(false)
+  potentialValue   Float?
+  nextStep         String?
+  nextContactDate  DateTime?
+  notes            String?
+  createdById      String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  client    Client @relation(fields: [clientId], references: [id])
+  executive User   @relation("ExecutiveVisits", fields: [executiveId], references: [id])
+
+  @@map("visits")
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  executiveId String
+  areaId      String?
+  metricType  String   @default("REVENUE") // "REVENUE", "SALES_COUNT", "VISITS_COUNT", "PROPOSALS_COUNT", "NEW_CLIENTS"
+  targetValue Float    @default(0)
+  periodStart DateTime
+  periodEnd   DateTime
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  executive User  @relation("ExecutiveGoals", fields: [executiveId], references: [id])
+  area      Area? @relation(fields: [areaId], references: [id])
+
+  @@map("goals")
+}
+
+model AgendaEvent {
+  id            String    @id @default(cuid())
+  title         String
+  description   String?
+  eventDate     DateTime
+  startTime     String?
+  endTime       String?
+  eventType     String    @default("MEETING")
+  clientId      String?
+  contactId     String?
+  opportunityId String?
+  projectId     String?
+  userId        String
+  isDone        Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id])
+  client Client? @relation(fields: [clientId], references: [id])
+
+  @@map("agenda_events")
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  fileId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  file File @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, fileId])
+  @@map("favorites")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorUserId String?
+  action      String // "CREATE", "UPDATE", "DELETE", "LOGIN", "RESTORE", "VERSION_UPGRADE"
+  entityType  String // "USER", "CLIENT", "FILE", "OPPORTUNITY", "SALE", "PROJECT", "VALUATION"
+  entityId    String?
+  beforeData  String? // JSON string
+  afterData   String? // JSON string
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+
+  actorUser User? @relation("ActorUser", fields: [actorUserId], references: [id])
+
+  @@map("audit_logs")
+}
+
+model TrashItem {
+  id              String   @id @default(cuid())
+  entityType      String
+  entityId        String
+  name            String
+  deletedByUserId String
+  originalData    String? // JSON string of the deleted object
+  deletedAt       DateTime @default(now())
+
+  deletedByUser User @relation("DeletedByUser", fields: [deletedByUserId], references: [id])
+
+  @@map("trash_items")
+}
+
+model BrandColor {
+  id          String   @id @default(cuid())
+  brandKey    String   // "tv" | "gplus"
+  name        String
+  hex         String
+  rgb         String?
+  cmyk        String?
+  usage       String?
+  notes       String?
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("brand_colors")
+}
+
+model SystemConfig {
+  id          String   @id @default(cuid())
+  category    String   // "GERAL", "ARQUIVOS", "AUDITORIA", "LIXEIRA"
+  key         String   @unique
+  value       String
+  description String?
+  updatedById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("system_configs")
+}
