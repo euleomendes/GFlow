@@ -84,6 +84,67 @@ export async function GET(request: NextRequest) {
       }
     });
 
+    // 3. Alertas inteligentes de Metas (80% e 100% Batida)
+    const goalsWhere: any = {
+      periodStart: { lte: now },
+      periodEnd: { gte: now },
+    };
+    if (!isMgr) {
+      goalsWhere.executiveId = user.id;
+    }
+
+    const currentGoals = await prisma.goal.findMany({
+      where: goalsWhere,
+      include: {
+        area: true,
+        executive: { select: { id: true, name: true } },
+      },
+    });
+
+    for (const g of currentGoals) {
+      if (g.metricType !== 'REVENUE' || g.targetValue <= 0) continue;
+
+      const sales = await prisma.sale.findMany({
+        where: {
+          executiveId: g.executiveId,
+          ...(g.areaId ? { areaId: g.areaId } : {}),
+          closedAt: {
+            gte: g.periodStart,
+            lte: g.periodEnd,
+          },
+        },
+      });
+
+      const realized = sales.reduce((acc, s) => acc + s.value, 0);
+      const percent = Math.round((realized / g.targetValue) * 100);
+      const areaName = g.area?.name || 'Geral';
+      const execPrefix = isMgr ? `${g.executive.name}: ` : '';
+
+      if (percent >= 100) {
+        dynamicAlerts.unshift({
+          id: `alert-goal-won-${g.id}`,
+          type: 'GOAL_WON',
+          title: 'Meta Batida! 🏆',
+          message: `${execPrefix}Atingiu ${percent}% da meta de ${areaName} (${formatCurrency(realized)} de ${formatCurrency(g.targetValue)}).`,
+          link: '/metas',
+          createdAt: new Date(),
+          priority: 'HIGH',
+          isRead: false,
+        });
+      } else if (percent >= 80) {
+        dynamicAlerts.push({
+          id: `alert-goal-80-${g.id}`,
+          type: 'GOAL_80',
+          title: 'Quase lá! (≥80% da Meta) 🎯',
+          message: `${execPrefix}Atingiu ${percent}% da meta de ${areaName}. Faltam apenas ${formatCurrency(g.targetValue - realized)}.`,
+          link: '/metas',
+          createdAt: new Date(),
+          priority: 'MEDIUM',
+          isRead: false,
+        });
+      }
+    }
+
     // Consolidar alertas
     const allItems = [
       ...dynamicAlerts,

@@ -10,6 +10,8 @@ import {
   ExternalLink,
   Check,
   X,
+  Trophy,
+  Target,
 } from 'lucide-react';
 
 export default function NotificationsPopover() {
@@ -126,6 +128,12 @@ export default function NotificationsPopover() {
                 } else if (n.type === 'DUE_SOON') {
                   icon = <Clock className="w-4 h-4 text-amber-500 flex-shrink-0" />;
                   bgBadge = 'bg-amber-50 text-amber-700';
+                } else if (n.type === 'GOAL_WON') {
+                  icon = <Trophy className="w-4 h-4 text-amber-500 flex-shrink-0" />;
+                  bgBadge = 'bg-emerald-50 text-emerald-800 border border-emerald-200';
+                } else if (n.type === 'GOAL_80') {
+                  icon = <Target className="w-4 h-4 text-purple-600 flex-shrink-0" />;
+                  bgBadge = 'bg-purple-50 text-purple-800 border border-purple-200';
                 }
 
                 return (

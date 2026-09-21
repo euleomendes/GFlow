@@ -28,6 +28,7 @@ import {
   Share2,
 } from 'lucide-react';
 import { AuthenticatedUser } from '@/types';
+import ConvertToSaleModal from '@/components/common/ConvertToSaleModal';
 
 interface ClientDetailsClientProps {
   client: any;
@@ -58,6 +59,7 @@ export default function ClientDetailsClient({
   >('overview');
 
   // Modals state
+  const [selectedOppToConvert, setSelectedOppToConvert] = useState<any | null>(null);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showVisitModal, setShowVisitModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -698,13 +700,23 @@ export default function ClientDetailsClient({
                       </div>
                     </div>
 
-                    <div className="text-right flex-shrink-0">
+                    <div className="text-right flex-shrink-0 flex flex-col items-end">
                       <div className="font-black text-ink-black text-sm">
                         {formatCurrency(opp.estimatedValue)}
                       </div>
                       <span className="text-[10px] font-bold text-blue-600">
                         Ponderado: {formatCurrency((opp.estimatedValue * (opp.probability || 10)) / 100)}
                       </span>
+                      {opp.status !== 'WON' && opp.status !== 'LOST' && (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedOppToConvert(opp)}
+                          className="mt-1.5 inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] rounded-md shadow-2xs transition-colors"
+                        >
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>Converter em Venda</span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 );
@@ -1210,6 +1222,19 @@ export default function ClientDetailsClient({
             </form>
           </div>
         </div>
+      )}
+
+      {/* Modal de Conversão Rápida em Venda */}
+      {selectedOppToConvert && (
+        <ConvertToSaleModal
+          isOpen={!!selectedOppToConvert}
+          opportunity={selectedOppToConvert}
+          onClose={() => setSelectedOppToConvert(null)}
+          onSuccess={() => {
+            setSelectedOppToConvert(null);
+            router.refresh();
+          }}
+        />
       )}
     </div>
   );

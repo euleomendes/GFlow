@@ -32,6 +32,8 @@ import {
   Printer,
   Download,
   Award,
+  ShieldAlert,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { AuthenticatedUser } from '@/types';
 import ConvertToSaleModal from '@/components/common/ConvertToSaleModal';
@@ -81,6 +83,9 @@ export default function ProjectionsClient({
 
   // Active Tab
   const [activeTab, setActiveTab] = useState<'FORECAST' | 'CALENDAR' | 'PROJECT_FUNNEL' | 'CLIENTS' | 'GOALS'>('FORECAST');
+
+  // Scenario Simulation State: WEIGHTED (default), CONSERVATIVE (prob >= 70%), OPTIMISTIC (100%)
+  const [scenario, setScenario] = useState<'WEIGHTED' | 'CONSERVATIVE' | 'OPTIMISTIC'>('WEIGHTED');
 
   // Interactive Clickable Month Filter in FORECAST Tab
   // 'ALL' means consolidated 3 months, or specific monthKey e.g. "2026-09"
@@ -159,6 +164,56 @@ export default function ProjectionsClient({
   useEffect(() => {
     fetchProjections();
   }, [mode, quarter, year, areaKey, selectedExecutiveId, selectedProjectId]);
+
+  // Recálculo dinâmico baseado no Cenário de Simulação selecionado
+  const scenarioData = useMemo(() => {
+    if (!data) return null;
+
+    const getOppScenarioValue = (opp: any) => {
+      const val = opp.estimatedValue || 0;
+      const prob = opp.probability || 0;
+      if (scenario === 'CONSERVATIVE') {
+        return prob >= 70 ? val : 0;
+      }
+      if (scenario === 'OPTIMISTIC') {
+        return val;
+      }
+      return (val * prob) / 100;
+    };
+
+    const monthlyBreakdown = (data.monthlyBreakdown || []).map((m: any) => {
+      const oppsInMonth = (data.allOpportunities || []).filter((o: any) => o.monthKey === m.monthKey);
+      const scenarioPipeline = oppsInMonth.reduce((acc: number, o: any) => acc + getOppScenarioValue(o), 0);
+      const forecastTotal = (m.realizedRevenue || 0) + scenarioPipeline;
+      const attainmentPercent = (m.targetGoal || 0) > 0 ? Math.round((forecastTotal / m.targetGoal) * 100) : 0;
+
+      return {
+        ...m,
+        scenarioPipeline,
+        forecastTotal,
+        attainmentPercent,
+      };
+    });
+
+    const totalRealized = data.consolidatedQuarter?.totalRealized || 0;
+    const totalGoal = data.consolidatedQuarter?.totalGoal || 0;
+    const allOppsPipeline = (data.allOpportunities || []).reduce(
+      (acc: number, o: any) => acc + getOppScenarioValue(o),
+      0
+    );
+    const totalForecast = totalRealized + allOppsPipeline;
+    const quarterAttainmentPercent = totalGoal > 0 ? Math.round((totalForecast / totalGoal) * 100) : 0;
+
+    return {
+      getOppScenarioValue,
+      monthlyBreakdown,
+      consolidatedQuarter: {
+        ...data.consolidatedQuarter,
+        totalForecast,
+        quarterAttainmentPercent,
+      },
+    };
+  }, [data, scenario]);
 
   // Handle Create Opportunity (Alimentação da Projeção)
   const handleCreateOpportunity = async (e: React.FormEvent) => {
@@ -259,14 +314,16 @@ export default function ProjectionsClient({
     }
 
     const headers = [
+      'Mês Previsto',
       'Cliente',
       'Projeto Comercial',
-      'Área',
+      'Área de Negócio',
       'Executivo Responsável',
       'Etapa Atual',
       'Valor Estimado (R$)',
       'Probabilidade (%)',
       'Valor Ponderado (R$)',
+      `Valor no Cenário (${scenario === 'CONSERVATIVE' ? 'Conservador' : scenario === 'OPTIMISTIC' ? 'Otimista' : 'Ponderado'}) (R$)`,
       'Prazo Previsto (Deadline)',
       'Status do Prazo',
       'Próximo Passo / Acompanhamento',
@@ -274,6 +331,7 @@ export default function ProjectionsClient({
     ];
 
     const rows = data.allOpportunities.map((opp: any) => [
+      `"${opp.monthKey || ''}"`,
       `"${(opp.client?.tradeName || opp.client?.legalName || '').replace(/"/g, '""')}"`,
       `"${(opp.project?.name || 'Sem Projeto').replace(/"/g, '""')}"`,
       `"${opp.area?.name || ''}"`,
@@ -282,6 +340,7 @@ export default function ProjectionsClient({
       opp.estimatedValue || 0,
       `${opp.probability || 0}%`,
       opp.weightedValue || 0,
+      scenarioData?.getOppScenarioValue(opp) ?? opp.weightedValue,
       `"${opp.formattedCloseDate || ''}"`,
       `"${opp.deadlineStatus}"`,
       `"${(opp.nextStep || '').replace(/"/g, '""')}"`,
@@ -664,7 +723,7 @@ export default function ProjectionsClient({
                       Atingimento Estimado da Meta Trimestral
                     </span>
                     <div className="text-3xl font-black text-emerald-400 leading-tight">
-                      {data.consolidatedQuarter.quarterAttainmentPercent}%
+                      {(scenarioData?.consolidatedQuarter || data.consolidatedQuarter).quarterAttainmentPercent}%
                     </div>
                     <span className="text-[11px] text-slate-300">
                       Realizado: {data.consolidatedQuarter.quarterRealizedPercent}%
@@ -694,11 +753,80 @@ export default function ProjectionsClient({
                     </span>
                   </div>
 
-                  <div className="p-3 bg-blue-500/10 rounded-xl border border-blue-400/30">
-                    <span className="text-[10px] uppercase font-bold text-blue-300 block">Projeção Final Ponderada</span>
-                    <span className="text-lg font-black text-blue-300">
-                      {formatCurrency(data.consolidatedQuarter.totalForecast)}
+                  <div className={`p-3 rounded-xl border ${
+                    scenario === 'CONSERVATIVE'
+                      ? 'bg-amber-500/15 border-amber-400/40 text-amber-300'
+                      : scenario === 'OPTIMISTIC'
+                      ? 'bg-emerald-500/15 border-emerald-400/40 text-emerald-300'
+                      : 'bg-blue-500/10 border-blue-400/30 text-blue-300'
+                  }`}>
+                    <span className="text-[10px] uppercase font-bold block">
+                      {scenario === 'CONSERVATIVE'
+                        ? 'Projeção (Conservador ≥70%)'
+                        : scenario === 'OPTIMISTIC'
+                        ? 'Projeção (Otimista 100%)'
+                        : 'Projeção Final Ponderada'}
                     </span>
+                    <span className="text-lg font-black">
+                      {formatCurrency((scenarioData?.consolidatedQuarter || data.consolidatedQuarter).totalForecast)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Seletor de Cenários de Forecast */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-white/10 mt-4 print:hidden">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                      <SlidersHorizontal className="w-3.5 h-3.5 text-blue-400" />
+                      Simulador de Cenário:
+                    </span>
+                    <span className="text-[11px] text-slate-400 hidden sm:inline">
+                      {scenario === 'CONSERVATIVE' && 'Considera apenas negócios em fase final (probabilidade ≥ 70%)'}
+                      {scenario === 'WEIGHTED' && 'Pondera cada negócio pela sua probabilidade estimada'}
+                      {scenario === 'OPTIMISTIC' && 'Assume 100% de conversão de todas as negociações em aberto'}
+                    </span>
+                  </div>
+
+                  <div className="inline-flex p-1 bg-white/10 rounded-xl border border-white/15 self-start sm:self-auto">
+                    <button
+                      type="button"
+                      onClick={() => setScenario('CONSERVATIVE')}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                        scenario === 'CONSERVATIVE'
+                          ? 'bg-amber-500 text-white shadow-xs'
+                          : 'text-slate-300 hover:text-white'
+                      }`}
+                      title="Considera apenas negociações com probabilidade >= 70%"
+                    >
+                      <ShieldAlert className="w-3.5 h-3.5" />
+                      <span>Conservador (≥70%)</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setScenario('WEIGHTED')}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                        scenario === 'WEIGHTED'
+                          ? 'bg-blue-500 text-white shadow-xs'
+                          : 'text-slate-300 hover:text-white'
+                      }`}
+                      title="Projeção padrão ponderada pela probabilidade"
+                    >
+                      <SlidersHorizontal className="w-3.5 h-3.5" />
+                      <span>Ponderado (Padrão)</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setScenario('OPTIMISTIC')}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                        scenario === 'OPTIMISTIC'
+                          ? 'bg-emerald-500 text-white shadow-xs'
+                          : 'text-slate-300 hover:text-white'
+                      }`}
+                      title="Assume 100% de conversão de todo o pipeline ativo"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Otimista (100%)</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -729,7 +857,7 @@ export default function ProjectionsClient({
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {data.monthlyBreakdown.map((m: any) => {
+                  {(scenarioData?.monthlyBreakdown || data.monthlyBreakdown).map((m: any) => {
                     const isSelected = selectedMonthFilter === m.monthKey;
 
                     return (
@@ -777,12 +905,26 @@ export default function ProjectionsClient({
                           </div>
 
                           <div className="flex justify-between items-baseline">
-                            <span className="text-slate-500 font-medium">Em Negociação (Ponderado):</span>
-                            <span className="font-bold text-blue-600">{formatCurrency(m.projectedWeighted)}</span>
+                            <span className="text-slate-500 font-medium">
+                              {scenario === 'CONSERVATIVE'
+                                ? 'Em Negociação (≥70%):'
+                                : scenario === 'OPTIMISTIC'
+                                ? 'Em Negociação (100%):'
+                                : 'Em Negociação (Ponderado):'}
+                            </span>
+                            <span className="font-bold text-blue-600">
+                              {formatCurrency(m.scenarioPipeline !== undefined ? m.scenarioPipeline : m.projectedWeighted)}
+                            </span>
                           </div>
 
                           <div className="pt-2 border-t border-slate-200 flex justify-between items-baseline">
-                            <span className="font-bold text-slate-800">Projeção Final:</span>
+                            <span className="font-bold text-slate-800">
+                              {scenario === 'CONSERVATIVE'
+                                ? 'Projeção (Conservador):'
+                                : scenario === 'OPTIMISTIC'
+                                ? 'Projeção (Otimista):'
+                                : 'Projeção Final:'}
+                            </span>
                             <span className="font-black text-base text-ink-black">{formatCurrency(m.forecastTotal)}</span>
                           </div>
 
@@ -907,8 +1049,18 @@ export default function ProjectionsClient({
                               <div className="text-sm font-black text-ink-black">
                                 {formatCurrency(opp.estimatedValue)}
                               </div>
-                              <div className="text-[11px] text-blue-600 font-bold">
-                                {opp.probability}% conf. → {formatCurrency(opp.weightedValue)}
+                              <div className="text-[11px] font-bold">
+                                {scenario === 'CONSERVATIVE' ? (
+                                  opp.probability >= 70 ? (
+                                    <span className="text-amber-600 font-extrabold">≥70%: {formatCurrency(opp.estimatedValue)}</span>
+                                  ) : (
+                                    <span className="text-slate-400 font-normal">Desconsiderado (&lt;70%)</span>
+                                  )
+                                ) : scenario === 'OPTIMISTIC' ? (
+                                  <span className="text-emerald-600 font-extrabold">100%: {formatCurrency(opp.estimatedValue)}</span>
+                                ) : (
+                                  <span className="text-blue-600">{opp.probability}% conf. → {formatCurrency(opp.weightedValue)}</span>
+                                )}
                               </div>
                             </div>
 

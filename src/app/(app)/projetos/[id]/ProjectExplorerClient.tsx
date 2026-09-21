@@ -35,6 +35,7 @@ import {
   ArrowUpRight,
 } from 'lucide-react';
 import { AuthenticatedUser } from '@/types';
+import ConvertToSaleModal from '@/components/common/ConvertToSaleModal';
 
 interface ProjectExplorerClientProps {
   project: any;
@@ -70,6 +71,7 @@ export default function ProjectExplorerClient({
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'FILES' | 'COMMERCIAL'>('FILES');
   const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
+  const [selectedOppToConvert, setSelectedOppToConvert] = useState<any | null>(null);
 
   // Commercial Funnel Metrics
   const totalValuation = (project.valuations || []).reduce(
@@ -682,13 +684,26 @@ export default function ProjectExplorerClient({
                             )}
                           </td>
                           <td className="py-3 px-4 text-center">
-                            <Link
-                              href={`/projecoes?projectId=${project.id}`}
-                              className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-slate-100 dark:hover:bg-slate-800 inline-flex transition-colors"
-                              title="Ver projeções deste projeto"
-                            >
-                              <ExternalLink className="w-4 h-4" />
-                            </Link>
+                            <div className="flex items-center justify-center gap-1.5">
+                              {opp.status !== 'WON' && opp.status !== 'LOST' && (
+                                <button
+                                  type="button"
+                                  onClick={() => setSelectedOppToConvert(opp)}
+                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] shadow-2xs transition-colors"
+                                  title="Converter em Venda Oficial"
+                                >
+                                  <CheckCircle2 className="w-3 h-3" />
+                                  <span>Converter</span>
+                                </button>
+                              )}
+                              <Link
+                                href={`/projecoes?projectId=${project.id}`}
+                                className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-slate-100 dark:hover:bg-slate-800 inline-flex transition-colors"
+                                title="Ver projeções deste projeto"
+                              >
+                                <ExternalLink className="w-4 h-4" />
+                              </Link>
+                            </div>
                           </td>
                         </tr>
                       );
@@ -989,6 +1004,19 @@ export default function ProjectExplorerClient({
             </div>
           </div>
         </div>
+      )}
+
+      {/* Modal de Conversão Rápida em Venda */}
+      {selectedOppToConvert && (
+        <ConvertToSaleModal
+          isOpen={!!selectedOppToConvert}
+          opportunity={selectedOppToConvert}
+          onClose={() => setSelectedOppToConvert(null)}
+          onSuccess={() => {
+            setSelectedOppToConvert(null);
+            router.refresh();
+          }}
+        />
       )}
     </div>
   );
