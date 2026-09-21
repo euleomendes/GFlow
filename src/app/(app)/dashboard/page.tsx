@@ -223,7 +223,7 @@ export default async function DashboardPage({
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/60">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-xl font-bold tracking-tight text-ink-black">
               {isManager
                 ? selectedExecutive
                   ? `Overview: ${selectedExecutive.name}`
@@ -231,12 +231,12 @@ export default async function DashboardPage({
                 : `Olá, ${user.name}`}
             </h1>
             {isManager && selectedExecutive && (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-slate/10 text-blue-slate border border-blue-slate/25">
                 Visão Individual
               </span>
             )}
             {isManager && !selectedExecutive && (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-deep-space/10 text-deep-space border border-deep-space/25">
                 Consolidado da Emissora
               </span>
             )}
@@ -267,8 +267,8 @@ export default async function DashboardPage({
               href={buildFilterUrl('all', selectedExecutiveId)}
               className={`px-3 py-1 rounded-md transition-all ${
                 selectedAreaKey === 'all'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white text-ink-black shadow-xs'
+                  : 'text-deep-space/70 hover:text-ink-black'
               }`}
             >
               Todas Áreas
@@ -277,8 +277,8 @@ export default async function DashboardPage({
               href={buildFilterUrl('tv', selectedExecutiveId)}
               className={`px-3 py-1 rounded-md transition-all ${
                 selectedAreaKey === 'tv'
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-blue-700'
+                  ? 'bg-deep-space text-white shadow-xs'
+                  : 'text-deep-space/70 hover:text-deep-space'
               }`}
             >
               TV
@@ -287,8 +287,8 @@ export default async function DashboardPage({
               href={buildFilterUrl('gplus', selectedExecutiveId)}
               className={`px-3 py-1 rounded-md transition-all ${
                 selectedAreaKey === 'gplus'
-                  ? 'bg-emerald-600 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-emerald-700'
+                  ? 'bg-blue-slate text-white shadow-xs'
+                  : 'text-deep-space/70 hover:text-blue-slate'
               }`}
             >
               GPlus
@@ -305,16 +305,16 @@ export default async function DashboardPage({
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Vendas Fechadas
             </span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-blue-slate/10 text-blue-slate flex items-center justify-center">
               <DollarSign className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-slate-900">
+            <div className="text-2xl font-bold tracking-tight text-ink-black">
               {formatCurrency(totalSales)}
             </div>
             <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-500">
-              <span className="font-semibold text-emerald-600">{sales.length} vendas</span>
+              <span className="font-semibold text-blue-slate">{sales.length} vendas</span>
               <span>no período</span>
             </div>
           </div>
@@ -326,23 +326,23 @@ export default async function DashboardPage({
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Meta do Mês
             </span>
-            <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-deep-space/10 text-deep-space flex items-center justify-center">
               <Target className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3">
             <div className="flex items-baseline justify-between">
-              <span className="text-2xl font-bold tracking-tight text-slate-900">
+              <span className="text-2xl font-bold tracking-tight text-ink-black">
                 {formatCurrency(totalGoal)}
               </span>
-              <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+              <span className="text-xs font-bold text-blue-slate bg-blue-slate/10 border border-blue-slate/20 px-2 py-0.5 rounded-full">
                 {goalProgress}%
               </span>
             </div>
             {/* Progress bar */}
             <div className="mt-2.5 w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
               <div
-                className="bg-blue-600 h-full rounded-full transition-all duration-500"
+                className="bg-blue-slate h-full rounded-full transition-all duration-500"
                 style={{ width: `${Math.min(goalProgress, 100)}%` }}
               />
             </div>
@@ -351,7 +351,7 @@ export default async function DashboardPage({
                 <span className="text-slate-400">Atribuída pelo Gerente</span>
                 <Link
                   href="/metas"
-                  className="text-blue-600 font-semibold hover:text-blue-800 flex items-center gap-0.5"
+                  className="text-blue-slate font-semibold hover:text-deep-space flex items-center gap-0.5"
                 >
                   <span>Gerenciar metas</span>
                   <ArrowUpRight className="w-3 h-3" />
@@ -367,16 +367,16 @@ export default async function DashboardPage({
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Pipeline Aberto
             </span>
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-dusty-denim/20 text-deep-space flex items-center justify-center">
               <TrendingUp className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-slate-900">
+            <div className="text-2xl font-bold tracking-tight text-ink-black">
               {formatCurrency(pipelineTotal)}
             </div>
             <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-500">
-              <span className="font-semibold text-slate-700">
+              <span className="font-semibold text-deep-space/80">
                 Ponderado: {formatCurrency(weightedPipeline)}
               </span>
             </div>
@@ -389,16 +389,16 @@ export default async function DashboardPage({
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Clientes Ativos
             </span>
-            <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-deep-space/10 text-deep-space flex items-center justify-center">
               <Users className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-slate-900">
+            <div className="text-2xl font-bold tracking-tight text-ink-black">
               {activeClientsCount}
             </div>
             <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-500">
-              <span className="font-semibold text-purple-700">{totalVisitsCount} visitas</span>
+              <span className="font-semibold text-deep-space">{totalVisitsCount} visitas</span>
               <span>registradas</span>
             </div>
           </div>
@@ -412,11 +412,11 @@ export default async function DashboardPage({
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-deep-space/10 text-deep-space flex items-center justify-center">
                   <BarChart3 className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-bold text-slate-900">
+                  <h2 className="text-sm font-bold text-ink-black">
                     Evolução de Vendas & Metas
                   </h2>
                   <p className="text-xs text-slate-500">
@@ -452,8 +452,8 @@ export default async function DashboardPage({
               {/* Legenda do Gráfico */}
               <div className="flex items-center justify-end gap-4 text-[11px] text-slate-500 mb-2">
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-xs bg-blue-600 inline-block" />
-                  <span className="font-medium text-slate-700">Realizado</span>
+                  <span className="w-2.5 h-2.5 rounded-xs bg-blue-slate inline-block" />
+                  <span className="font-medium text-deep-space">Realizado</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-xs bg-slate-200 border border-slate-300 border-dashed inline-block" />
@@ -477,11 +477,11 @@ export default async function DashboardPage({
                       <span
                         className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md mb-2 transition-all ${
                           m.attainmentPercent >= 100
-                            ? 'bg-emerald-100 text-emerald-800'
+                            ? 'bg-deep-space text-white'
                             : m.attainmentPercent >= 80
-                            ? 'bg-blue-100 text-blue-800'
+                            ? 'bg-blue-slate/15 text-blue-slate font-bold'
                             : m.attainmentPercent > 0
-                            ? 'bg-amber-100 text-amber-800'
+                            ? 'bg-dusty-denim/25 text-deep-space font-bold'
                             : 'bg-slate-100 text-slate-500'
                         }`}
                       >
@@ -504,8 +504,8 @@ export default async function DashboardPage({
                           <div
                             className={`w-full rounded-t transition-all duration-500 ${
                               m.attainmentPercent >= 100
-                                ? 'bg-emerald-600 hover:bg-emerald-700 shadow-xs'
-                                : 'bg-blue-600 hover:bg-blue-700 shadow-xs'
+                                ? 'bg-deep-space hover:bg-ink-black shadow-xs'
+                                : 'bg-blue-slate hover:bg-deep-space shadow-xs'
                             }`}
                             style={{ height: `${Math.max(barHeightPercent, 4)}%` }}
                             title={`Realizado: ${formatCurrency(m.realizedRevenue)}`}
@@ -514,8 +514,8 @@ export default async function DashboardPage({
                       </div>
 
                       {/* Rótulo do Mês e Valores */}
-                      <span className="text-xs font-bold text-slate-800 mt-2">{m.label}</span>
-                      <span className="text-[10px] font-bold text-slate-900 mt-0.5">
+                      <span className="text-xs font-bold text-ink-black mt-2">{m.label}</span>
+                      <span className="text-[10px] font-bold text-ink-black mt-0.5">
                         {formatCurrency(m.realizedRevenue)}
                       </span>
                       <span className="text-[9px] text-slate-400">
@@ -534,7 +534,7 @@ export default async function DashboardPage({
               <span className="text-[10px] uppercase font-semibold text-slate-400 block">
                 Total Acumulado
               </span>
-              <span className="text-xs font-bold text-slate-800">
+              <span className="text-xs font-bold text-ink-black">
                 {formatCurrency(evolution.totalRevenue)}
               </span>
             </div>
@@ -542,7 +542,7 @@ export default async function DashboardPage({
               <span className="text-[10px] uppercase font-semibold text-slate-400 block">
                 Atingimento Médio
               </span>
-              <span className="text-xs font-bold text-blue-700">
+              <span className="text-xs font-bold text-blue-slate">
                 {evolution.averageAttainment}%
               </span>
             </div>
@@ -550,7 +550,7 @@ export default async function DashboardPage({
               <span className="text-[10px] uppercase font-semibold text-slate-400 block">
                 Ticket Médio
               </span>
-              <span className="text-xs font-bold text-slate-800">
+              <span className="text-xs font-bold text-ink-black">
                 {formatCurrency(evolution.averageTicketMedio)}
               </span>
             </div>
@@ -561,11 +561,11 @@ export default async function DashboardPage({
         <div className="lg:col-span-5 bg-white border border-slate-200/80 rounded-xl p-5 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-blue-slate/10 text-blue-slate flex items-center justify-center">
                 <PieChart className="w-4 h-4" />
               </div>
               <div>
-                <h2 className="text-sm font-bold text-slate-900">
+                <h2 className="text-sm font-bold text-ink-black">
                   Distribuição de Faturamento
                 </h2>
                 <p className="text-xs text-slate-500">
@@ -587,28 +587,28 @@ export default async function DashboardPage({
                     stroke="#F1F5F9"
                     strokeWidth="12"
                   />
-                  {/* Arco TV Guararapes */}
+                  {/* Arco TV Guararapes (#1D2D44 deep-space) */}
                   {tvPercent > 0 && (
                     <circle
                       cx="50"
                       cy="50"
                       r={donutRadius}
                       fill="transparent"
-                      stroke="#0047AB"
+                      stroke="#1D2D44"
                       strokeWidth="12"
                       strokeDasharray={`${tvStrokeDash} ${donutCircumference}`}
                       strokeDashoffset="0"
                       className="transition-all duration-700 ease-out"
                     />
                   )}
-                  {/* Arco GPlus Digital */}
+                  {/* Arco GPlus Digital (#3E5C76 blue-slate) */}
                   {gplusPercent > 0 && (
                     <circle
                       cx="50"
                       cy="50"
                       r={donutRadius}
                       fill="transparent"
-                      stroke="#059669"
+                      stroke="#3E5C76"
                       strokeWidth="12"
                       strokeDasharray={`${gplusStrokeDash} ${donutCircumference}`}
                       strokeDashoffset={gplusStrokeOffset}
@@ -622,7 +622,7 @@ export default async function DashboardPage({
                   <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                     Total
                   </span>
-                  <span className="text-xs font-black text-slate-800">
+                  <span className="text-xs font-black text-ink-black">
                     {formatCurrency(distribution.totalRevenue)}
                   </span>
                   <span className="text-[9px] text-slate-400 font-medium">
@@ -634,38 +634,38 @@ export default async function DashboardPage({
               {/* Legenda rica ao lado */}
               <div className="space-y-3 w-full max-w-xs">
                 {/* TV Guararapes */}
-                <div className="p-2.5 rounded-lg border border-blue-100 bg-blue-50/40">
+                <div className="p-2.5 rounded-lg border border-deep-space/20 bg-deep-space/5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#0047AB] inline-block" />
-                      <span className="text-xs font-bold text-slate-800">TV Guararapes</span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#1D2D44] inline-block" />
+                      <span className="text-xs font-bold text-ink-black">TV Guararapes</span>
                     </div>
-                    <span className="text-xs font-extrabold text-blue-800">
+                    <span className="text-xs font-extrabold text-deep-space">
                       {tvPercent}%
                     </span>
                   </div>
                   <div className="mt-1 flex items-center justify-between text-[11px] text-slate-500">
                     <span>{formatCurrency(tvDistItem?.value || 0)}</span>
-                    <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.2 rounded font-semibold">
+                    <span className="text-[10px] bg-deep-space/10 text-deep-space px-1.5 py-0.2 rounded font-semibold">
                       Canal 9.1
                     </span>
                   </div>
                 </div>
 
                 {/* Portal GPlus */}
-                <div className="p-2.5 rounded-lg border border-emerald-100 bg-emerald-50/40">
+                <div className="p-2.5 rounded-lg border border-blue-slate/20 bg-blue-slate/5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#059669] inline-block" />
-                      <span className="text-xs font-bold text-slate-800">Portal GPlus</span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#3E5C76] inline-block" />
+                      <span className="text-xs font-bold text-ink-black">Portal GPlus</span>
                     </div>
-                    <span className="text-xs font-extrabold text-emerald-800">
+                    <span className="text-xs font-extrabold text-blue-slate">
                       {gplusPercent}%
                     </span>
                   </div>
                   <div className="mt-1 flex items-center justify-between text-[11px] text-slate-500">
                     <span>{formatCurrency(gplusDistItem?.value || 0)}</span>
-                    <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.2 rounded font-semibold">
+                    <span className="text-[10px] bg-blue-slate/10 text-blue-slate px-1.5 py-0.2 rounded font-semibold">
                       Digital
                     </span>
                   </div>
@@ -675,8 +675,8 @@ export default async function DashboardPage({
           </div>
 
           {/* Dica Estratégica de Cross-selling */}
-          <div className="mt-3 p-2.5 bg-slate-50 rounded-lg text-[11px] text-slate-600 border border-slate-100 flex items-center gap-2">
-            <Award className="w-4 h-4 text-amber-500 flex-shrink-0" />
+          <div className="mt-3 p-2.5 bg-slate-50 rounded-lg text-[11px] text-deep-space border border-slate-200/70 flex items-center gap-2">
+            <Award className="w-4 h-4 text-dusty-denim flex-shrink-0" />
             <span>
               <strong>Cross-selling:</strong> Negócios multimídia (TV + Digital) apresentam retenção 35% superior.
             </span>
@@ -691,7 +691,7 @@ export default async function DashboardPage({
           <div className="bg-white border border-slate-200/80 rounded-xl p-5 shadow-xs">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-sm font-bold text-slate-900">
+                <h2 className="text-sm font-bold text-ink-black">
                   Oportunidades em Negociação
                 </h2>
                 <p className="text-xs text-slate-500">
@@ -700,7 +700,7 @@ export default async function DashboardPage({
               </div>
               <Link
                 href="/oportunidades"
-                className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                className="text-xs font-semibold text-blue-slate hover:text-deep-space flex items-center gap-1 transition-colors"
               >
                 Ver todas <ChevronRight className="w-3.5 h-3.5" />
               </Link>
@@ -719,14 +719,14 @@ export default async function DashboardPage({
                   >
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-slate-900 truncate">
+                        <span className="text-xs font-bold text-ink-black truncate">
                           {opp.client.tradeName || opp.client.legalName}
                         </span>
                         <span
                           className={`text-[10px] font-bold px-1.5 py-0.2 rounded uppercase ${
                             opp.area?.key === 'tv'
-                              ? 'bg-blue-50 text-blue-700'
-                              : 'bg-emerald-50 text-emerald-700'
+                              ? 'bg-deep-space/10 text-deep-space'
+                              : 'bg-blue-slate/10 text-blue-slate'
                           }`}
                         >
                           {opp.area?.name}
@@ -738,7 +738,7 @@ export default async function DashboardPage({
                     </div>
 
                     <div className="text-right flex-shrink-0">
-                      <div className="text-xs font-bold text-slate-900">
+                      <div className="text-xs font-bold text-ink-black">
                         {formatCurrency(opp.estimatedValue)}
                       </div>
                       <div className="text-[10px] font-medium text-slate-500">
@@ -753,7 +753,7 @@ export default async function DashboardPage({
 
           {/* Comparativo de Área (TV vs GPlus) */}
           <div className="bg-white border border-slate-200/80 rounded-xl p-5 shadow-xs">
-            <h2 className="text-sm font-bold text-slate-900 mb-1">
+            <h2 className="text-sm font-bold text-ink-black mb-1">
               Desempenho por Área de Negócio
             </h2>
             <p className="text-xs text-slate-500 mb-4">
@@ -761,17 +761,17 @@ export default async function DashboardPage({
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 rounded-xl border border-blue-100 bg-blue-50/40">
+              <div className="p-4 rounded-xl border border-deep-space/20 bg-deep-space/5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Tv className="w-4 h-4 text-blue-600" />
-                    <span className="text-xs font-bold text-slate-800">TV Guararapes</span>
+                    <Tv className="w-4 h-4 text-deep-space" />
+                    <span className="text-xs font-bold text-ink-black">TV Guararapes</span>
                   </div>
-                  <span className="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-bold bg-deep-space/10 text-deep-space px-2 py-0.5 rounded">
                     Canal 9.1
                   </span>
                 </div>
-                <div className="mt-3 text-xl font-black text-blue-900">
+                <div className="mt-3 text-xl font-black text-deep-space">
                   {formatCurrency(tvSales)}
                 </div>
                 <p className="text-[11px] text-slate-500 mt-1">
@@ -779,17 +779,17 @@ export default async function DashboardPage({
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl border border-emerald-100 bg-emerald-50/40">
+              <div className="p-4 rounded-xl border border-blue-slate/20 bg-blue-slate/5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-emerald-600" />
-                    <span className="text-xs font-bold text-slate-800">GPlus Digital</span>
+                    <Layers className="w-4 h-4 text-blue-slate" />
+                    <span className="text-xs font-bold text-ink-black">GPlus Digital</span>
                   </div>
-                  <span className="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-bold bg-blue-slate/10 text-blue-slate px-2 py-0.5 rounded">
                     Multiplataforma
                   </span>
                 </div>
-                <div className="mt-3 text-xl font-black text-emerald-900">
+                <div className="mt-3 text-xl font-black text-blue-slate">
                   {formatCurrency(gplusSales)}
                 </div>
                 <p className="text-[11px] text-slate-500 mt-1">
@@ -805,12 +805,12 @@ export default async function DashboardPage({
           {/* Visitas Recentes */}
           <div className="bg-white border border-slate-200/80 rounded-xl p-5 shadow-xs">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-bold text-slate-900">
+              <h2 className="text-sm font-bold text-ink-black">
                 Últimas Visitas
               </h2>
               <Link
                 href="/visitas"
-                className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+                className="text-xs font-semibold text-blue-slate hover:text-deep-space transition-colors"
               >
                 Ver todas
               </Link>
@@ -825,7 +825,7 @@ export default async function DashboardPage({
                 {visits.map((v) => (
                   <div key={v.id} className="p-3 bg-slate-50/70 border border-slate-100 rounded-lg">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-slate-800 truncate">
+                      <span className="font-bold text-ink-black truncate">
                         {v.client.tradeName}
                       </span>
                       <span className="text-[10px] text-slate-500">
@@ -838,7 +838,7 @@ export default async function DashboardPage({
                     <div className="mt-2 flex items-center justify-between text-[10px] text-slate-400">
                       <span>Resp: {v.executive.name.split(' ')[0]}</span>
                       {v.hasOpportunity && (
-                        <span className="text-emerald-600 font-semibold">Oportunidade gerada</span>
+                        <span className="text-blue-slate font-semibold">Oportunidade gerada</span>
                       )}
                     </div>
                   </div>
@@ -852,14 +852,14 @@ export default async function DashboardPage({
             <div className="bg-white border border-slate-200/80 rounded-xl p-5 shadow-xs">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-1.5">
-                  <Activity className="w-4 h-4 text-slate-700" />
-                  <h2 className="text-sm font-bold text-slate-900">
+                  <Activity className="w-4 h-4 text-deep-space" />
+                  <h2 className="text-sm font-bold text-ink-black">
                     Auditoria Recente
                   </h2>
                 </div>
                 <Link
                   href="/admin/audit"
-                  className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+                  className="text-xs font-semibold text-blue-slate hover:text-deep-space transition-colors"
                 >
                   Histórico completo
                 </Link>
@@ -869,7 +869,7 @@ export default async function DashboardPage({
                 {recentAuditLogs.map((log) => (
                   <div key={log.id} className="text-xs border-l-2 border-slate-300 pl-3 py-1">
                     <div className="flex items-center justify-between text-[10px] text-slate-500">
-                      <span className="font-semibold text-slate-700">
+                      <span className="font-semibold text-deep-space">
                         {log.actorUser?.name || 'Sistema'}
                       </span>
                       <span>
@@ -880,7 +880,7 @@ export default async function DashboardPage({
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-800 font-medium mt-0.5">
-                      <span className="text-blue-600 font-bold uppercase text-[9px] mr-1">
+                      <span className="text-blue-slate font-bold uppercase text-[9px] mr-1">
                         [{log.action}]
                       </span>
                       {log.entityType}: {log.entityId || 'Registro'}

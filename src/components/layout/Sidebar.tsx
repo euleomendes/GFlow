@@ -81,17 +81,17 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
         key={item.name}
         href={item.href}
         onClick={onCloseMobile}
-        className={`group flex items-center justify-between px-3 py-2 text-xs font-medium rounded-lg transition-colors ${
+        className={`group flex items-center justify-between px-3 py-2 text-xs font-medium rounded-lg transition-all ${
           isActive
-            ? 'bg-blue-50 text-blue-700 font-semibold border-l-2 border-blue-600 rounded-l-none'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+            ? 'bg-blue-slate/40 text-white font-semibold border-l-2 border-dusty-denim rounded-l-none shadow-xs'
+            : 'text-slate-300 hover:text-white hover:bg-deep-space/50'
         }`}
       >
         <div className="flex items-center gap-2.5 min-w-0">
-          <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
+          <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-white' : 'text-dusty-denim/80 group-hover:text-white transition-colors'}`} />
           <span className="truncate">{item.name}</span>
         </div>
-        {isActive && <ChevronRight className="w-3.5 h-3.5 text-blue-600" />}
+        {isActive && <ChevronRight className="w-3.5 h-3.5 text-dusty-denim" />}
       </Link>
     );
   };
@@ -102,25 +102,25 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
       {isOpen && (
         <div
           onClick={onCloseMobile}
-          className="fixed inset-0 z-40 bg-slate-900/20 backdrop-blur-sm lg:hidden transition-opacity"
+          className="fixed inset-0 z-40 bg-ink-black/60 backdrop-blur-xs lg:hidden transition-opacity"
         />
       )}
 
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-white border-r border-slate-200/80 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-ink-black border-r border-deep-space/70 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Brand Header */}
-        <div className="h-16 flex items-center px-5 border-b border-slate-100 gap-3">
-          <div className="w-8 h-8 rounded-lg bg-slate-900 text-white font-black text-sm flex items-center justify-center shadow-xs">
+        <div className="h-16 flex items-center px-5 border-b border-deep-space/80 gap-3">
+          <div className="w-8 h-8 rounded-lg bg-deep-space border border-blue-slate/40 text-white font-black text-sm flex items-center justify-center shadow-xs">
             GF
           </div>
           <div>
-            <span className="text-base font-bold tracking-tight text-slate-900">
+            <span className="text-base font-bold tracking-tight text-white">
               GFLOW
             </span>
-            <span className="block text-[9px] font-semibold tracking-wider uppercase text-blue-600">
+            <span className="block text-[9px] font-semibold tracking-wider uppercase text-dusty-denim">
               TV Guararapes
             </span>
           </div>
@@ -139,7 +139,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
 
           {/* Comercial */}
           <div>
-            <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim/75">
               Comercial
             </div>
             <div className="space-y-0.5">{commercialNav.map(renderNavLink)}</div>
@@ -147,7 +147,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
 
           {/* Projetos */}
           <div>
-            <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim/75">
               Projetos
             </div>
             <div className="space-y-0.5">{projectsNav.map(renderNavLink)}</div>
@@ -155,7 +155,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
 
           {/* Biblioteca */}
           <div>
-            <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim/75">
               Biblioteca
             </div>
             <div className="space-y-0.5">{libraryNav.map(renderNavLink)}</div>
@@ -164,7 +164,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
           {/* Marketing - Apenas se Gerente ou perfil MKT */}
           {isManager && (
             <div>
-              <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim/75">
                 Marketing
               </div>
               <div className="space-y-0.5">{marketingNav.map(renderNavLink)}</div>
@@ -174,7 +174,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
           {/* Relatórios */}
           {isManager && (
             <div>
-              <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim/75">
                 Inteligência
               </div>
               <div className="space-y-0.5">
@@ -190,7 +190,7 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
           {/* Administração - Exclusivo Gerente / Admin */}
           {isManager && (
             <div>
-              <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-dusty-denim/75">
                 Administração
               </div>
               <div className="space-y-0.5">{adminNav.map(renderNavLink)}</div>
@@ -199,16 +199,16 @@ export default function Sidebar({ user, isOpen, onCloseMobile }: SidebarProps) {
         </div>
 
         {/* User Card footer */}
-        <div className="p-3 border-t border-slate-100 bg-slate-50/60">
+        <div className="p-3 border-t border-deep-space/80 bg-deep-space/40">
           <div className="flex items-center gap-3 px-2 py-1.5">
-            <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs">
+            <div className="w-8 h-8 rounded-full bg-blue-slate text-white flex items-center justify-center font-bold text-xs shadow-xs">
               {user.name.slice(0, 2).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold text-slate-800 truncate">
+              <p className="text-xs font-semibold text-white truncate">
                 {user.name}
               </p>
-              <p className="text-[10px] font-medium text-slate-500 uppercase tracking-wider truncate">
+              <p className="text-[10px] font-medium text-dusty-denim uppercase tracking-wider truncate">
                 {user.roleName}
               </p>
             </div>

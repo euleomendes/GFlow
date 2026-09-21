@@ -7,6 +7,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        'ink-black': '#0D1321',
+        'deep-space': '#1D2D44',
+        'blue-slate': '#3E5C76',
+        'dusty-denim': '#748CAB',
         guara: {
           50: '#f0f7ff',
           100: '#e0effe',

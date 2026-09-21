@@ -51,13 +51,13 @@ export default function Topbar({
   };
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-30 h-16 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between gap-4">
       {/* Left side: Hamburger & Global Search */}
       <div className="flex items-center gap-3 flex-1 max-w-xl">
         <button
           type="button"
           onClick={onToggleSidebar}
-          className="lg:hidden p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+          className="lg:hidden p-2 rounded-lg text-deep-space/70 hover:text-ink-black hover:bg-slate-100 transition-colors"
           aria-label="Abrir menu"
         >
           <Menu className="w-5 h-5" />
@@ -65,7 +65,7 @@ export default function Topbar({
 
         {/* Global Search Bar (Section 29) */}
         <form onSubmit={handleSearchSubmit} className="relative w-full max-w-md">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-deep-space/50">
             <Search className="w-4 h-4" />
           </div>
           <input
@@ -73,7 +73,7 @@ export default function Topbar({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar clientes, projetos, valorações ou arquivos..."
-            className="w-full pl-9 pr-3 py-1.5 bg-slate-100/80 hover:bg-slate-100 focus:bg-white border border-transparent focus:border-slate-200 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600/15 transition-all"
+            className="w-full pl-9 pr-3 py-1.5 bg-slate-100/80 hover:bg-slate-100 focus:bg-white border border-transparent focus:border-blue-slate/40 rounded-lg text-xs text-ink-black placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-slate/20 transition-all"
           />
         </form>
       </div>
@@ -81,14 +81,14 @@ export default function Topbar({
       {/* Right side: Area Switcher + Notifications + Profile */}
       <div className="flex items-center gap-2 sm:gap-4">
         {/* Area Toggle Pills (TV / GPlus / Todos) */}
-        <div className="hidden md:flex items-center bg-slate-100/90 p-0.5 rounded-lg border border-slate-200/60">
+        <div className="hidden md:flex items-center bg-slate-100/90 p-0.5 rounded-lg border border-slate-200/70">
           <button
             type="button"
             onClick={() => onAreaChange?.('all')}
             className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${
               currentArea === 'all'
-                ? 'bg-white text-slate-900 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white text-ink-black shadow-xs'
+                : 'text-deep-space/70 hover:text-ink-black'
             }`}
           >
             Todos
@@ -98,8 +98,8 @@ export default function Topbar({
             onClick={() => onAreaChange?.('tv')}
             className={`flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${
               currentArea === 'tv'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-slate-600 hover:text-blue-700'
+                ? 'bg-deep-space text-white shadow-xs'
+                : 'text-deep-space/70 hover:text-deep-space'
             }`}
           >
             <Tv className="w-3 h-3" />
@@ -110,8 +110,8 @@ export default function Topbar({
             onClick={() => onAreaChange?.('gplus')}
             className={`flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${
               currentArea === 'gplus'
-                ? 'bg-emerald-600 text-white shadow-xs'
-                : 'text-slate-600 hover:text-emerald-700'
+                ? 'bg-blue-slate text-white shadow-xs'
+                : 'text-deep-space/70 hover:text-blue-slate'
             }`}
           >
             <Layers className="w-3 h-3" />
@@ -123,24 +123,24 @@ export default function Topbar({
         <button
           type="button"
           onClick={() => alert('Notificações internas: Nenhuma pendência crítica no momento.')}
-          className="relative p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+          className="relative p-2 rounded-lg text-deep-space/75 hover:text-ink-black hover:bg-slate-100 transition-colors"
           title="Notificações"
         >
           <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-600" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-slate" />
         </button>
 
         {/* User Pill */}
         <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
           <div className="hidden sm:block text-right">
-            <div className="text-xs font-semibold text-slate-900 leading-tight">
+            <div className="text-xs font-bold text-ink-black leading-tight">
               {user.name.split(' ')[0]}
             </div>
             <span
-              className={`inline-block text-[10px] font-bold px-1.5 py-0.2 rounded ${
+              className={`inline-block text-[10px] font-bold px-1.5 py-0.2 rounded border ${
                 user.roleKey === 'manager'
-                  ? 'bg-purple-100 text-purple-700'
-                  : 'bg-blue-100 text-blue-700'
+                  ? 'bg-deep-space/10 text-deep-space border-deep-space/20'
+                  : 'bg-blue-slate/10 text-blue-slate border-blue-slate/20'
               }`}
             >
               {user.roleKey === 'manager' ? 'Gerente' : 'Executivo'}
@@ -152,7 +152,7 @@ export default function Topbar({
             type="button"
             onClick={handleLogout}
             disabled={loggingOut}
-            className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+            className="p-2 rounded-lg text-deep-space/60 hover:text-rose-600 hover:bg-rose-50 transition-colors"
             title="Sair do GFlow"
           >
             <LogOut className="w-4 h-4" />
