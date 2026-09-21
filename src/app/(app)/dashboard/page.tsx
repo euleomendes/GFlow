@@ -220,7 +220,7 @@ export default async function DashboardPage({
   return (
     <div className="space-y-8">
       {/* Header & Context */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-gray-200">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-slate-300">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold tracking-tight text-ink-black">
@@ -262,12 +262,12 @@ export default async function DashboardPage({
           )}
 
           {/* Seletor de Área (TV / GPlus / Todas) */}
-          <div className="inline-flex bg-white p-1 rounded-lg border border-gray-200 shadow-sm text-xs font-semibold">
+          <div className="inline-flex bg-white p-1 rounded-lg border border-slate-300 shadow-sm text-xs font-semibold">
             <Link
               href={buildFilterUrl('all', selectedExecutiveId)}
               className={`px-3 py-1 rounded-md transition-all ${
                 selectedAreaKey === 'all'
-                  ? 'bg-gray-100 text-ink-black shadow-xs font-bold'
+                  ? 'bg-slate-100 text-ink-black shadow-xs font-bold'
                   : 'text-deep-space/70 hover:text-ink-black'
               }`}
             >
@@ -300,7 +300,7 @@ export default async function DashboardPage({
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Card 1: Vendas Realizadas */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-white border border-slate-300 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Vendas Fechadas
@@ -321,7 +321,7 @@ export default async function DashboardPage({
         </div>
 
         {/* Card 2: Meta e Atingimento */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-white border border-slate-300 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Meta do Mês
@@ -340,14 +340,14 @@ export default async function DashboardPage({
               </span>
             </div>
             {/* Progress bar */}
-            <div className="mt-3 w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+            <div className="mt-3 w-full bg-slate-100 rounded-full h-2 overflow-hidden border border-slate-200">
               <div
                 className="bg-blue-slate h-full rounded-full transition-all duration-500"
                 style={{ width: `${Math.min(goalProgress, 100)}%` }}
               />
             </div>
             {isManager && (
-              <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px]">
+              <div className="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-[11px]">
                 <span className="text-slate-400">Atribuída pelo Gerente</span>
                 <Link
                   href="/metas"
@@ -362,7 +362,7 @@ export default async function DashboardPage({
         </div>
 
         {/* Card 3: Pipeline de Oportunidades */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-white border border-slate-300 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Pipeline Aberto
@@ -384,7 +384,7 @@ export default async function DashboardPage({
         </div>
 
         {/* Card 4: Clientes Ativos & Visitas */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-white border border-slate-300 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               Clientes Ativos
@@ -408,7 +408,7 @@ export default async function DashboardPage({
       {/* SEÇÃO: EVOLUÇÃO COMERCIAL & DISTRIBUIÇÃO (GRÁFICO EVOLUTIVO E PIZZA) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Gráfico 1: Evolução Mensal de Vendas e Metas (7 colunas) */}
-        <div className="lg:col-span-7 bg-white border border-gray-200 rounded-xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-7 bg-white border border-slate-300 rounded-xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
               <div className="flex items-center gap-2.5">
@@ -462,7 +462,7 @@ export default async function DashboardPage({
               </div>
 
               {/* Colunas dos Meses */}
-              <div className="grid grid-cols-4 gap-2 sm:gap-4 pt-2 pb-2 border-b border-gray-100">
+              <div className="grid grid-cols-4 gap-2 sm:gap-4 pt-2 pb-2 border-b border-slate-200">
                 {evolution.monthlyData.map((m) => {
                   const barHeightPercent = maxEvolutionValue > 0
                     ? Math.min(Math.round((m.realizedRevenue / maxEvolutionValue) * 100), 100)
@@ -489,7 +489,7 @@ export default async function DashboardPage({
                       </span>
 
                       {/* Recipiente de Barras */}
-                      <div className="h-36 w-full flex items-end justify-center gap-1.5 sm:gap-2 px-1 bg-gray-50/80 border border-gray-100 rounded-xl p-2">
+                      <div className="h-36 w-full flex items-end justify-center gap-1.5 sm:gap-2 px-1 bg-slate-50 border border-slate-200 rounded-xl p-2">
                         {/* Barra Meta */}
                         <div className="w-1/2 flex flex-col items-center justify-end h-full">
                           <div
@@ -529,8 +529,8 @@ export default async function DashboardPage({
           </div>
 
           {/* Mini Rodapé com KPIs de Evolução */}
-          <div className="mt-6 pt-4 border-t border-gray-100 grid grid-cols-3 gap-3 text-center">
-            <div className="p-3 rounded-xl bg-gray-50 border border-gray-100">
+          <div className="mt-6 pt-4 border-t border-slate-200 grid grid-cols-3 gap-3 text-center">
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
               <span className="text-[10px] uppercase font-semibold text-slate-400 block">
                 Total Acumulado
               </span>
@@ -538,7 +538,7 @@ export default async function DashboardPage({
                 {formatCurrency(evolution.totalRevenue)}
               </span>
             </div>
-            <div className="p-3 rounded-xl bg-gray-50 border border-gray-100">
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
               <span className="text-[10px] uppercase font-semibold text-slate-400 block">
                 Atingimento Médio
               </span>
@@ -546,7 +546,7 @@ export default async function DashboardPage({
                 {evolution.averageAttainment}%
               </span>
             </div>
-            <div className="p-3 rounded-xl bg-gray-50 border border-gray-100">
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
               <span className="text-[10px] uppercase font-semibold text-slate-400 block">
                 Ticket Médio
               </span>
@@ -558,7 +558,7 @@ export default async function DashboardPage({
         </div>
 
         {/* Gráfico 2: Pizza / Donut de Distribuição (5 colunas) */}
-        <div className="lg:col-span-5 bg-white border border-gray-200 rounded-xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-white border border-slate-300 rounded-xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2.5 mb-4">
               <div className="w-9 h-9 rounded-xl bg-blue-slate/10 text-blue-slate flex items-center justify-center">
@@ -634,7 +634,7 @@ export default async function DashboardPage({
               {/* Legenda rica ao lado */}
               <div className="space-y-3 w-full max-w-xs">
                 {/* TV Guararapes */}
-                <div className="p-3.5 rounded-xl border border-gray-200 bg-gray-50/60">
+                <div className="p-3.5 rounded-xl border border-slate-300 bg-slate-50/70">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#1D2D44] inline-block" />
@@ -646,14 +646,14 @@ export default async function DashboardPage({
                   </div>
                   <div className="mt-1.5 flex items-center justify-between text-[11px] text-slate-500">
                     <span>{formatCurrency(tvDistItem?.value || 0)}</span>
-                    <span className="text-[10px] bg-deep-space/10 text-deep-space px-2 py-0.5 rounded font-semibold">
+                    <span className="text-[10px] bg-deep-space/10 text-deep-space px-2 py-0.5 rounded font-semibold border border-deep-space/20">
                       Canal 9.1
                     </span>
                   </div>
                 </div>
 
                 {/* Portal GPlus */}
-                <div className="p-3.5 rounded-xl border border-gray-200 bg-gray-50/60">
+                <div className="p-3.5 rounded-xl border border-slate-300 bg-slate-50/70">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#3E5C76] inline-block" />
@@ -665,7 +665,7 @@ export default async function DashboardPage({
                   </div>
                   <div className="mt-1.5 flex items-center justify-between text-[11px] text-slate-500">
                     <span>{formatCurrency(gplusDistItem?.value || 0)}</span>
-                    <span className="text-[10px] bg-blue-slate/10 text-blue-slate px-2 py-0.5 rounded font-semibold">
+                    <span className="text-[10px] bg-blue-slate/10 text-blue-slate px-2 py-0.5 rounded font-semibold border border-blue-slate/20">
                       Digital
                     </span>
                   </div>
@@ -675,7 +675,7 @@ export default async function DashboardPage({
           </div>
 
           {/* Dica Estratégica de Cross-selling */}
-          <div className="mt-6 p-3.5 bg-gray-50 rounded-xl text-[11px] text-deep-space border border-gray-200 flex items-center gap-2.5">
+          <div className="mt-6 p-3.5 bg-slate-50 rounded-xl text-[11px] text-deep-space border border-slate-300 flex items-center gap-2.5">
             <Award className="w-4 h-4 text-dusty-denim flex-shrink-0" />
             <span>
               <strong>Cross-selling:</strong> Negócios multimídia (TV + Digital) apresentam retenção 35% superior.
@@ -688,8 +688,8 @@ export default async function DashboardPage({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left 2 Cols: Oportunidades em Negociação / Pipeline */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+          <div className="bg-white border border-slate-300 rounded-xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-200">
               <div>
                 <h2 className="text-sm font-bold text-ink-black">
                   Oportunidades em Negociação
@@ -711,11 +711,11 @@ export default async function DashboardPage({
                 Nenhuma oportunidade aberta com os filtros atuais.
               </div>
             ) : (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-slate-200">
                 {opportunities.map((opp) => (
                   <div
                     key={opp.id}
-                    className="py-4 flex items-center justify-between gap-4 hover:bg-gray-50/80 px-2 rounded-lg transition-colors"
+                    className="py-4 flex items-center justify-between gap-4 hover:bg-slate-50/80 px-2 rounded-lg transition-colors"
                   >
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
@@ -723,10 +723,10 @@ export default async function DashboardPage({
                           {opp.client.tradeName || opp.client.legalName}
                         </span>
                         <span
-                          className={`text-[10px] font-bold px-1.5 py-0.2 rounded uppercase ${
+                          className={`text-[10px] font-bold px-1.5 py-0.2 rounded uppercase border ${
                             opp.area?.key === 'tv'
-                              ? 'bg-deep-space/10 text-deep-space border border-deep-space/20'
-                              : 'bg-blue-slate/10 text-blue-slate border border-blue-slate/20'
+                              ? 'bg-deep-space/10 text-deep-space border-deep-space/30'
+                              : 'bg-blue-slate/10 text-blue-slate border-blue-slate/30'
                           }`}
                         >
                           {opp.area?.name}
@@ -752,7 +752,7 @@ export default async function DashboardPage({
           </div>
 
           {/* Comparativo de Área (TV vs GPlus) */}
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+          <div className="bg-white border border-slate-300 rounded-xl p-6 shadow-sm">
             <h2 className="text-sm font-bold text-ink-black mb-1">
               Desempenho por Área de Negócio
             </h2>
@@ -761,13 +761,13 @@ export default async function DashboardPage({
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="p-6 rounded-xl border border-gray-200 bg-gray-50/60 shadow-xs hover:border-deep-space/30 transition-all">
+              <div className="p-6 rounded-xl border border-slate-300 bg-slate-50/60 shadow-xs hover:border-deep-space/60 transition-all">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Tv className="w-4 h-4 text-deep-space" />
                     <span className="text-xs font-bold text-ink-black">TV Guararapes</span>
                   </div>
-                  <span className="text-[10px] font-bold bg-deep-space/10 text-deep-space px-2 py-0.5 rounded border border-deep-space/20">
+                  <span className="text-[10px] font-bold bg-deep-space/10 text-deep-space px-2 py-0.5 rounded border border-deep-space/30">
                     Canal 9.1
                   </span>
                 </div>
@@ -779,13 +779,13 @@ export default async function DashboardPage({
                 </p>
               </div>
 
-              <div className="p-6 rounded-xl border border-gray-200 bg-gray-50/60 shadow-xs hover:border-blue-slate/30 transition-all">
+              <div className="p-6 rounded-xl border border-slate-300 bg-slate-50/60 shadow-xs hover:border-blue-slate/60 transition-all">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Layers className="w-4 h-4 text-blue-slate" />
                     <span className="text-xs font-bold text-ink-black">GPlus Digital</span>
                   </div>
-                  <span className="text-[10px] font-bold bg-blue-slate/10 text-blue-slate px-2 py-0.5 rounded border border-blue-slate/20">
+                  <span className="text-[10px] font-bold bg-blue-slate/10 text-blue-slate px-2 py-0.5 rounded border border-blue-slate/30">
                     Multiplataforma
                   </span>
                 </div>
@@ -803,8 +803,8 @@ export default async function DashboardPage({
         {/* Right 1 Col: Visitas Recentes & Auditoria / Atividades */}
         <div className="space-y-6">
           {/* Visitas Recentes */}
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+          <div className="bg-white border border-slate-300 rounded-xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-200">
               <h2 className="text-sm font-bold text-ink-black">
                 Últimas Visitas
               </h2>
@@ -821,7 +821,7 @@ export default async function DashboardPage({
                 Nenhuma visita recente registrada.
               </div>
             ) : (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-slate-200">
                 {visits.map((v) => (
                   <div key={v.id} className="py-3.5 first:pt-0 last:pb-0">
                     <div className="flex items-center justify-between text-xs">
@@ -849,8 +849,8 @@ export default async function DashboardPage({
 
           {/* Feed de Auditoria (Apenas para Gerente) */}
           {isManager && (
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+            <div className="bg-white border border-slate-300 rounded-xl p-6 shadow-sm">
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-200">
                 <div className="flex items-center gap-1.5">
                   <Activity className="w-4 h-4 text-deep-space" />
                   <h2 className="text-sm font-bold text-ink-black">
@@ -865,7 +865,7 @@ export default async function DashboardPage({
                 </Link>
               </div>
 
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-slate-200">
                 {recentAuditLogs.map((log) => (
                   <div key={log.id} className="py-3 first:pt-0 last:pb-0 text-xs">
                     <div className="flex items-center justify-between text-[10px] text-slate-500">

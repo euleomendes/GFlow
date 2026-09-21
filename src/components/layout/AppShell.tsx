@@ -15,7 +15,7 @@ export default function AppShell({ user, children }: AppShellProps) {
   const [selectedArea, setSelectedArea] = useState<AreaFilter>('all');
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-slate-100 flex">
       {/* Sidebar */}
       <Sidebar
         user={user}

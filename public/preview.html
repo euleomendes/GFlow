@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Preview: Design System GFlow - TV Guararapes (Refinamento UI/UX)</title>
+  <title>Preview: Design System GFlow - TV Guararapes (Bordas Estruturadas & Nítidas)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -23,25 +23,25 @@
     }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 antialiased min-h-screen p-3 sm:p-6">
+<body class="bg-slate-200/70 text-slate-800 antialiased min-h-screen p-3 sm:p-6">
 
   <!-- TOP BAR: PALETTE & GUIDELINES PRESENTATION -->
-  <div class="max-w-7xl mx-auto mb-6 bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-200">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-gray-100">
+  <div class="max-w-7xl mx-auto mb-6 bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-300">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200">
       <div>
         <div class="flex items-center gap-2">
-          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#1D2D44] text-white">Refinamento UI/UX</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#1D2D44] text-white">Bordas Estruturadas</span>
           <h1 class="text-xl font-black text-[#0D1321] tracking-tight">Design System Oficial — GFlow</h1>
         </div>
         <p class="text-xs text-slate-500 mt-1">
-          Visualização fiel dos componentes de Layout e Dashboard com bordas estruturais, separadores de lista, cards bem definidos e espaçamento amplo.
+          Visualização com separação visual nítida: bordas estruturais de alto contraste, separadores de linha e cards elevados sobre fundo contrastante.
         </p>
       </div>
 
       <!-- Color Swatches -->
       <div class="flex flex-wrap items-center gap-2 sm:gap-3">
         <!-- ink-black -->
-        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-gray-200 bg-gray-50">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-300 bg-slate-50">
           <span class="w-4 h-4 rounded-md shadow-xs" style="background-color: #0D1321;"></span>
           <div>
             <div class="text-[10px] font-black uppercase text-[#0D1321] leading-none">ink-black</div>
@@ -49,7 +49,7 @@
           </div>
         </div>
         <!-- deep-space -->
-        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-gray-200 bg-gray-50">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-300 bg-slate-50">
           <span class="w-4 h-4 rounded-md shadow-xs" style="background-color: #1D2D44;"></span>
           <div>
             <div class="text-[10px] font-black uppercase text-[#1D2D44] leading-none">deep-space</div>
@@ -57,7 +57,7 @@
           </div>
         </div>
         <!-- blue-slate -->
-        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-gray-200 bg-gray-50">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-300 bg-slate-50">
           <span class="w-4 h-4 rounded-md shadow-xs" style="background-color: #3E5C76;"></span>
           <div>
             <div class="text-[10px] font-black uppercase text-[#3E5C76] leading-none">blue-slate</div>
@@ -65,7 +65,7 @@
           </div>
         </div>
         <!-- dusty-denim -->
-        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-gray-200 bg-gray-50">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-300 bg-slate-50">
           <span class="w-4 h-4 rounded-md shadow-xs" style="background-color: #748CAB;"></span>
           <div>
             <div class="text-[10px] font-black uppercase text-[#748CAB] leading-none">dusty-denim</div>
@@ -78,32 +78,32 @@
     <!-- Quick info tags -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-1 text-xs">
       <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-[#0D1321]"></span>
-        <span class="text-slate-600"><strong>Sidebar:</strong> Divisores <code>border-t border-white/10</code></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+        <span class="text-slate-700"><strong>Sidebar:</strong> <code>border-r border-slate-700</code></span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-[#3E5C76]"></span>
-        <span class="text-slate-600"><strong>Menu Ativo:</strong> <code>rounded-lg bg-blue-slate/50</code></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+        <span class="text-slate-700"><strong>Divisores Seção:</strong> <code>border-t border-slate-700/80</code></span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-[#1D2D44]"></span>
-        <span class="text-slate-600"><strong>Header:</strong> <code>border-b border-gray-200</code></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+        <span class="text-slate-700"><strong>Header & Cards:</strong> <code>border border-slate-300</code></span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-[#748CAB]"></span>
-        <span class="text-slate-600"><strong>Cards & Listas:</strong> <code>p-6 shadow-sm divide-y</code></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+        <span class="text-slate-700"><strong>Linhas Listas:</strong> <code>divide-y divide-slate-200</code></span>
       </div>
     </div>
   </div>
 
   <!-- APPLICATION PREVIEW CONTAINER -->
-  <div class="max-w-7xl mx-auto rounded-2xl overflow-hidden shadow-2xl border border-gray-300 flex flex-col md:flex-row min-h-[820px] bg-slate-50">
+  <div class="max-w-7xl mx-auto rounded-2xl overflow-hidden shadow-2xl border-2 border-slate-400/80 flex flex-col md:flex-row min-h-[820px] bg-slate-100">
 
-    <!-- 1. SIDEBAR (bg-ink-black: #0D1321, border-r border-[#748CAB]/20) -->
-    <aside class="w-full md:w-64 flex-shrink-0 flex flex-col justify-between border-r border-[#748CAB]/20" style="background-color: #0D1321;">
+    <!-- 1. SIDEBAR (bg-ink-black: #0D1321, border-r border-slate-700) -->
+    <aside class="w-full md:w-64 flex-shrink-0 flex flex-col justify-between border-r border-slate-700" style="background-color: #0D1321;">
       <div>
-        <!-- Brand Header -->
-        <div class="h-16 flex items-center px-5 gap-3 border-b border-[#748CAB]/20">
+        <!-- Brand Header (border-b border-slate-700) -->
+        <div class="h-16 flex items-center px-5 gap-3 border-b border-slate-700">
           <div class="w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm text-white shadow-xs border border-[#3E5C76]/40" style="background-color: #1D2D44;">
             GF
           </div>
@@ -135,8 +135,8 @@
             </div>
           </div>
 
-          <!-- Section: Comercial (with border-t border-white/10) -->
-          <div class="pt-4 border-t border-white/10">
+          <!-- Section: Comercial (with border-t border-slate-700/80) -->
+          <div class="pt-4 border-t border-slate-700/80">
             <div class="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider" style="color: rgba(116, 140, 171, 0.75);">
               Comercial
             </div>
@@ -184,8 +184,8 @@
             </div>
           </div>
 
-          <!-- Section: Projetos & Valorações (with border-t border-white/10) -->
-          <div class="pt-4 border-t border-white/10">
+          <!-- Section: Projetos & Valorações (with border-t border-slate-700/80) -->
+          <div class="pt-4 border-t border-slate-700/80">
             <div class="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider" style="color: rgba(116, 140, 171, 0.75);">
               Projetos & Valorações
             </div>
@@ -219,8 +219,8 @@
         </div>
       </div>
 
-      <!-- User Card footer (border-t border-white/10) -->
-      <div class="p-3 border-t border-white/10" style="background-color: rgba(29, 45, 68, 0.4);">
+      <!-- User Card footer (border-t border-slate-700) -->
+      <div class="p-3 border-t border-slate-700" style="background-color: rgba(29, 45, 68, 0.4);">
         <div class="flex items-center gap-3 px-2 py-1.5">
           <div class="w-8 h-8 rounded-full text-white flex items-center justify-center font-bold text-xs shadow-xs" style="background-color: #3E5C76;">
             AD
@@ -240,8 +240,8 @@
     <!-- 2. MAIN CONTENT AREA (Header + Dashboard Body) -->
     <div class="flex-1 flex flex-col min-w-0">
 
-      <!-- TOPBAR (Light background + border-b border-gray-200 + px-6 sm:px-8) -->
-      <header class="h-16 bg-white/95 backdrop-blur-md border-b border-gray-200 px-6 sm:px-8 flex items-center justify-between gap-4 sticky top-0 z-20">
+      <!-- TOPBAR (Light background + border-b border-slate-300 + px-6 sm:px-8) -->
+      <header class="h-16 bg-white/95 backdrop-blur-md border-b border-slate-300 px-6 sm:px-8 flex items-center justify-between gap-4 sticky top-0 z-20">
         <!-- Search bar -->
         <div class="flex items-center gap-3 flex-1 max-w-md">
           <div class="relative w-full">
@@ -253,7 +253,7 @@
             <input
               type="text"
               placeholder="Buscar clientes, projetos, valorações ou arquivos..."
-              class="w-full pl-9 pr-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3E5C76]/20"
+              class="w-full pl-9 pr-3 py-1.5 bg-gray-50 border border-slate-300 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3E5C76]/20"
               style="color: #0D1321;"
             />
           </div>
@@ -262,7 +262,7 @@
         <!-- Right Side: Interactive Area Switcher + Notifications + User Profile -->
         <div class="flex items-center gap-3">
           <!-- Area Switcher Pills -->
-          <div class="hidden sm:flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200" id="area-switcher">
+          <div class="hidden sm:flex items-center bg-gray-100 p-1 rounded-lg border border-slate-300" id="area-switcher">
             <button class="px-2.5 py-1 text-xs font-semibold rounded-md transition-colors bg-white shadow-xs" style="color: #0D1321;">
               Todos
             </button>
@@ -282,8 +282,8 @@
             <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style="background-color: #3E5C76;"></span>
           </button>
 
-          <!-- User Profile (border-l border-gray-200 pl-4) -->
-          <div class="flex items-center gap-2 pl-4 border-l border-gray-200">
+          <!-- User Profile (border-l border-slate-300 pl-4) -->
+          <div class="flex items-center gap-2 pl-4 border-l border-slate-300">
             <div class="text-right">
               <div class="text-xs font-bold leading-tight" style="color: #0D1321;">
                 Admin
@@ -305,15 +305,15 @@
       <!-- DASHBOARD BODY (Spacious whitespace: p-6 sm:p-8 lg:p-10 space-y-8) -->
       <main class="p-6 sm:p-8 lg:p-10 space-y-8 flex-1 overflow-y-auto">
 
-        <!-- Page Header (pb-6 border-b border-gray-200) -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-gray-200">
+        <!-- Page Header (pb-6 border-b border-slate-300) -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-slate-300">
           <div>
             <div class="flex items-center gap-2">
               <h2 class="text-xl font-bold tracking-tight" style="color: #0D1321;">
                 Dashboard Gerencial & Comercial
               </h2>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border"
-                    style="background-color: rgba(29, 45, 68, 0.1); color: #1D2D44; border-color: rgba(29, 45, 68, 0.25);">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border border-deep-space/30"
+                    style="background-color: rgba(29, 45, 68, 0.1); color: #1D2D44;">
                 Consolidado da Emissora
               </span>
             </div>
@@ -322,15 +322,15 @@
             </p>
           </div>
 
-          <!-- Selector -->
-          <div class="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-gray-200 shadow-sm text-xs font-semibold">
+          <!-- Selector (border border-slate-300) -->
+          <div class="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-slate-300 shadow-sm text-xs font-semibold">
             <div class="flex items-center gap-1 pl-2 text-[11px]" style="color: rgba(29, 45, 68, 0.7);">
               <svg class="w-3.5 h-3.5" style="color: #3E5C76;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
               </svg>
               <span>Visão:</span>
             </div>
-            <select class="bg-gray-50 text-xs font-semibold px-2.5 py-1 rounded-md border border-gray-200 cursor-pointer" style="color: #0D1321;">
+            <select class="bg-gray-50 text-xs font-semibold px-2.5 py-1 rounded-md border border-slate-300 cursor-pointer" style="color: #0D1321;">
               <option>Todos os Executivos (Consolidado)</option>
               <option>Carlos Eduardo (Recife)</option>
               <option>Mariana Silva (Digital GPlus)</option>
@@ -338,10 +338,10 @@
           </div>
         </div>
 
-        <!-- 4 KPI CARDS (p-6 border-gray-200 rounded-xl shadow-sm gap-6) -->
+        <!-- 4 KPI CARDS (p-6 border-slate-300 rounded-xl shadow-sm gap-6) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <!-- Card 1: Vendas -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-white border border-slate-300 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
               <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Vendas Fechadas</span>
               <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm" style="background-color: rgba(62, 92, 118, 0.1); color: #3E5C76;">
@@ -360,7 +360,7 @@
           </div>
 
           <!-- Card 2: Meta -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-white border border-slate-300 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
               <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Meta do Mês</span>
               <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm" style="background-color: rgba(29, 45, 68, 0.1); color: #1D2D44;">
@@ -372,15 +372,15 @@
                 <span class="text-2xl font-bold tracking-tight" style="color: #0D1321;">
                   R$ 500.000
                 </span>
-                <span class="text-xs font-bold px-2 py-0.5 rounded-full border"
-                      style="background-color: rgba(62, 92, 118, 0.1); color: #3E5C76; border-color: rgba(62, 92, 118, 0.2);">
+                <span class="text-xs font-bold px-2 py-0.5 rounded-full border border-blue-slate/20"
+                      style="background-color: rgba(62, 92, 118, 0.1); color: #3E5C76;">
                   86%
                 </span>
               </div>
-              <div class="mt-3 w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+              <div class="mt-3 w-full bg-slate-100 rounded-full h-2 overflow-hidden border border-slate-200">
                 <div class="h-full rounded-full" style="background-color: #3E5C76; width: 86%;"></div>
               </div>
-              <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px]">
+              <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-[11px]">
                 <span class="text-slate-400">Atribuída pelo Gerente</span>
                 <span class="font-semibold cursor-pointer" style="color: #3E5C76;">Gerenciar metas →</span>
               </div>
@@ -388,7 +388,7 @@
           </div>
 
           <!-- Card 3: Pipeline -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-white border border-slate-300 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
               <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Pipeline Aberto</span>
               <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm" style="background-color: rgba(116, 140, 171, 0.2); color: #1D2D44;">
@@ -406,7 +406,7 @@
           </div>
 
           <!-- Card 4: Clientes -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-white border border-slate-300 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
               <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Clientes Ativos</span>
               <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm" style="background-color: rgba(29, 45, 68, 0.1); color: #1D2D44;">
@@ -425,11 +425,11 @@
           </div>
         </div>
 
-        <!-- CHARTS SECTION (Evolution + Donut: gap-6, p-6 sm:p-8) -->
+        <!-- CHARTS SECTION (Evolution + Donut: gap-6, p-6 sm:p-8, border-slate-300) -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
           <!-- Gráfico 1: Evolução de Vendas (7 cols) -->
-          <div class="lg:col-span-7 bg-white border border-gray-200 rounded-xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+          <div class="lg:col-span-7 bg-white border border-slate-300 rounded-xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
             <div>
               <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center gap-2.5">
@@ -458,11 +458,11 @@
                 </div>
               </div>
 
-              <div class="grid grid-cols-4 gap-3 pt-2 pb-2 border-b border-gray-100">
+              <div class="grid grid-cols-4 gap-3 pt-2 pb-2 border-b border-slate-200">
                 <!-- Jun -->
                 <div class="flex flex-col items-center">
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded-md mb-2" style="background-color: rgba(62, 92, 118, 0.15); color: #3E5C76;">92%</span>
-                  <div class="h-36 w-full flex items-end justify-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl p-2">
+                  <div class="h-36 w-full flex items-end justify-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl p-2">
                     <div class="w-1/2 bg-slate-200 border border-dashed border-slate-300 rounded-t h-[75%]"></div>
                     <div class="w-1/2 rounded-t shadow-xs" style="background-color: #3E5C76; height: 70%;"></div>
                   </div>
@@ -472,7 +472,7 @@
                 <!-- Jul -->
                 <div class="flex flex-col items-center">
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded-md mb-2 text-white" style="background-color: #1D2D44;">104%</span>
-                  <div class="h-36 w-full flex items-end justify-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl p-2">
+                  <div class="h-36 w-full flex items-end justify-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl p-2">
                     <div class="w-1/2 bg-slate-200 border border-dashed border-slate-300 rounded-t h-[80%]"></div>
                     <div class="w-1/2 rounded-t shadow-xs text-white" style="background-color: #1D2D44; height: 83%;"></div>
                   </div>
@@ -482,7 +482,7 @@
                 <!-- Ago -->
                 <div class="flex flex-col items-center">
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded-md mb-2" style="background-color: rgba(116, 140, 171, 0.25); color: #1D2D44;">78%</span>
-                  <div class="h-36 w-full flex items-end justify-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl p-2">
+                  <div class="h-36 w-full flex items-end justify-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl p-2">
                     <div class="w-1/2 bg-slate-200 border border-dashed border-slate-300 rounded-t h-[90%]"></div>
                     <div class="w-1/2 rounded-t shadow-xs" style="background-color: #3E5C76; height: 70%;"></div>
                   </div>
@@ -492,7 +492,7 @@
                 <!-- Set (Current) -->
                 <div class="flex flex-col items-center">
                   <span class="text-[10px] font-bold px-2 py-0.5 rounded-md mb-2" style="background-color: rgba(62, 92, 118, 0.15); color: #3E5C76;">86%</span>
-                  <div class="h-36 w-full flex items-end justify-center gap-1.5 bg-gray-50 border border-gray-100 rounded-xl p-2">
+                  <div class="h-36 w-full flex items-end justify-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl p-2">
                     <div class="w-1/2 bg-slate-200 border border-dashed border-slate-300 rounded-t h-[100%]"></div>
                     <div class="w-1/2 rounded-t shadow-xs" style="background-color: #3E5C76; height: 86%;"></div>
                   </div>
@@ -503,16 +503,16 @@
             </div>
 
             <!-- Chart summary stats -->
-            <div class="mt-6 pt-4 border-t border-gray-100 grid grid-cols-3 gap-3 text-center">
-              <div class="p-3 rounded-xl bg-gray-50 border border-gray-100">
+            <div class="mt-6 pt-4 border-t border-slate-200 grid grid-cols-3 gap-3 text-center">
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
                 <span class="text-[10px] uppercase font-semibold text-slate-400 block">Total Acumulado</span>
                 <span class="text-xs font-bold" style="color: #0D1321;">R$ 1.598.000</span>
               </div>
-              <div class="p-3 rounded-xl bg-gray-50 border border-gray-100">
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
                 <span class="text-[10px] uppercase font-semibold text-slate-400 block">Atingimento Médio</span>
                 <span class="text-xs font-bold" style="color: #3E5C76;">90%</span>
               </div>
-              <div class="p-3 rounded-xl bg-gray-50 border border-gray-100">
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
                 <span class="text-[10px] uppercase font-semibold text-slate-400 block">Ticket Médio</span>
                 <span class="text-xs font-bold" style="color: #0D1321;">R$ 30.600</span>
               </div>
@@ -520,7 +520,7 @@
           </div>
 
           <!-- Gráfico 2: Donut de Distribuição (5 cols) -->
-          <div class="lg:col-span-5 bg-white border border-gray-200 rounded-xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+          <div class="lg:col-span-5 bg-white border border-slate-300 rounded-xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
             <div>
               <div class="flex items-center gap-2.5 mb-4">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm" style="background-color: rgba(62, 92, 118, 0.1); color: #3E5C76;">
@@ -536,7 +536,7 @@
               <div class="mt-4 flex flex-col sm:flex-row items-center justify-center gap-6 py-2">
                 <div class="relative w-36 h-36 flex-shrink-0">
                   <svg viewBox="0 0 100 100" class="w-full h-full transform -rotate-90">
-                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#F1F5F9" stroke-width="12"/>
+                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#E2E8F0" stroke-width="12"/>
                     <!-- TV Guararapes (#1D2D44) 62% -->
                     <circle cx="50" cy="50" r="40" fill="transparent" stroke="#1D2D44" stroke-width="12" stroke-dasharray="155.8 251.3" stroke-dashoffset="0"/>
                     <!-- GPlus (#3E5C76) 38% -->
@@ -549,9 +549,9 @@
                   </div>
                 </div>
 
-                <!-- Legend pills -->
+                <!-- Legend pills (border border-slate-300) -->
                 <div class="space-y-3 w-full max-w-xs">
-                  <div class="p-3.5 rounded-xl border border-gray-200 bg-gray-50/60">
+                  <div class="p-3.5 rounded-xl border border-slate-300 bg-slate-50/70">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full" style="background-color: #1D2D44;"></span>
@@ -561,11 +561,11 @@
                     </div>
                     <div class="mt-1.5 flex items-center justify-between text-[11px] text-slate-500">
                       <span>R$ 265.670</span>
-                      <span class="text-[10px] px-2 py-0.5 rounded font-semibold border border-deep-space/20" style="background-color: rgba(29, 45, 68, 0.1); color: #1D2D44;">Canal 9.1</span>
+                      <span class="text-[10px] px-2 py-0.5 rounded font-semibold border border-deep-space/30" style="background-color: rgba(29, 45, 68, 0.1); color: #1D2D44;">Canal 9.1</span>
                     </div>
                   </div>
 
-                  <div class="p-3.5 rounded-xl border border-gray-200 bg-gray-50/60">
+                  <div class="p-3.5 rounded-xl border border-slate-300 bg-slate-50/70">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full" style="background-color: #3E5C76;"></span>
@@ -575,7 +575,7 @@
                     </div>
                     <div class="mt-1.5 flex items-center justify-between text-[11px] text-slate-500">
                       <span>R$ 162.830</span>
-                      <span class="text-[10px] px-2 py-0.5 rounded font-semibold border border-blue-slate/20" style="background-color: rgba(62, 92, 118, 0.1); color: #3E5C76;">Digital</span>
+                      <span class="text-[10px] px-2 py-0.5 rounded font-semibold border border-blue-slate/30" style="background-color: rgba(62, 92, 118, 0.1); color: #3E5C76;">Digital</span>
                     </div>
                   </div>
                 </div>
@@ -583,7 +583,7 @@
             </div>
 
             <!-- Cross selling tip -->
-            <div class="mt-6 p-3.5 bg-gray-50 rounded-xl text-[11px] border border-gray-200 flex items-center gap-2.5" style="color: #1D2D44;">
+            <div class="mt-6 p-3.5 bg-slate-50 rounded-xl text-[11px] border border-slate-300 flex items-center gap-2.5" style="color: #1D2D44;">
               <span style="color: #748CAB;">🏆</span>
               <span><strong>Cross-selling:</strong> Negócios multimídia (TV + Digital) apresentam retenção 35% superior.</span>
             </div>
@@ -592,9 +592,9 @@
 
         <!-- LOWER SECTION: OPPORTUNITIES & AREA DESEMPENHO (gap-6) -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Oportunidades (2 cols: p-6 border-gray-200 rounded-xl shadow-sm) -->
-          <div class="lg:col-span-2 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+          <!-- Oportunidades (2 cols: p-6 border-slate-300 rounded-xl shadow-sm) -->
+          <div class="lg:col-span-2 bg-white border border-slate-300 rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-200">
               <div>
                 <h3 class="text-sm font-bold" style="color: #0D1321;">Oportunidades em Negociação</h3>
                 <p class="text-xs text-slate-500">Negócios abertos aguardando avanço de etapa ou fechamento</p>
@@ -602,13 +602,13 @@
               <span class="text-xs font-semibold cursor-pointer" style="color: #3E5C76;">Ver todas →</span>
             </div>
 
-            <!-- divide-y divide-gray-100 -->
-            <div class="divide-y divide-gray-100">
-              <div class="py-4 flex items-center justify-between gap-4 hover:bg-gray-50/80 px-2 rounded-lg transition-colors">
+            <!-- divide-y divide-slate-200 -->
+            <div class="divide-y divide-slate-200">
+              <div class="py-4 flex items-center justify-between gap-4 hover:bg-slate-50/80 px-2 rounded-lg transition-colors">
                 <div>
                   <div class="flex items-center gap-2">
                     <span class="text-xs font-bold" style="color: #0D1321;">Grupo Moura Baterias</span>
-                    <span class="text-[10px] font-bold px-1.5 py-0.2 rounded uppercase border border-deep-space/20" style="background-color: rgba(29, 45, 68, 0.1); color: #1D2D44;">TV</span>
+                    <span class="text-[10px] font-bold px-1.5 py-0.2 rounded uppercase border border-deep-space/30" style="background-color: rgba(29, 45, 68, 0.1); color: #1D2D44;">TV</span>
                   </div>
                   <p class="text-[11px] text-slate-500 mt-1">Próximo passo: Apresentação de plano de inserções no Balanço Geral</p>
                 </div>
@@ -618,11 +618,11 @@
                 </div>
               </div>
 
-              <div class="py-4 flex items-center justify-between gap-4 hover:bg-gray-50/80 px-2 rounded-lg transition-colors">
+              <div class="py-4 flex items-center justify-between gap-4 hover:bg-slate-50/80 px-2 rounded-lg transition-colors">
                 <div>
                   <div class="flex items-center gap-2">
                     <span class="text-xs font-bold" style="color: #0D1321;">Shopping Recife (Campanha Dia das Crianças)</span>
-                    <span class="text-[10px] font-bold px-1.5 py-0.2 rounded uppercase border border-blue-slate/20" style="background-color: rgba(62, 92, 118, 0.1); color: #3E5C76;">GPlus</span>
+                    <span class="text-[10px] font-bold px-1.5 py-0.2 rounded uppercase border border-blue-slate/30" style="background-color: rgba(62, 92, 118, 0.1); color: #3E5C76;">GPlus</span>
                   </div>
                   <p class="text-[11px] text-slate-500 mt-1">Próximo passo: Validação de formatos especiais no portal digital</p>
                 </div>
@@ -634,15 +634,15 @@
             </div>
           </div>
 
-          <!-- Auditoria Recente (1 col: p-6 border-gray-200 rounded-xl shadow-sm) -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+          <!-- Auditoria Recente (1 col: p-6 border-slate-300 rounded-xl shadow-sm) -->
+          <div class="bg-white border border-slate-300 rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-200">
               <h3 class="text-sm font-bold" style="color: #0D1321;">Auditoria Recente</h3>
               <span class="text-xs font-semibold cursor-pointer" style="color: #3E5C76;">Histórico →</span>
             </div>
 
-            <!-- divide-y divide-gray-100 -->
-            <div class="divide-y divide-gray-100">
+            <!-- divide-y divide-slate-200 -->
+            <div class="divide-y divide-slate-200">
               <div class="py-3 first:pt-0 last:pb-0 text-xs">
                 <div class="flex items-center justify-between text-[10px] text-slate-500">
                   <span class="font-semibold" style="color: #1D2D44;">Carlos Eduardo</span>

@@ -32,7 +32,7 @@ export default function ExecutiveSelector({
   };
 
   return (
-    <div className="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-gray-200 shadow-sm text-xs font-semibold">
+    <div className="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-slate-300 shadow-sm text-xs font-semibold">
       <div className="flex items-center gap-1 pl-2 text-deep-space/70 text-[11px]">
         {selectedExecutiveId === 'all' ? (
           <Users className="w-3.5 h-3.5 text-deep-space/60" />
@@ -44,7 +44,7 @@ export default function ExecutiveSelector({
       <select
         value={selectedExecutiveId}
         onChange={handleSelect}
-        className="bg-gray-50 hover:bg-gray-100/70 focus:bg-white text-ink-black text-xs font-semibold px-2.5 py-1 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-slate/20 focus:border-blue-slate cursor-pointer transition-colors"
+        className="bg-gray-50 hover:bg-gray-100/70 focus:bg-white text-ink-black text-xs font-semibold px-2.5 py-1 rounded-md border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-slate/20 focus:border-blue-slate cursor-pointer transition-colors"
         aria-label="Selecionar visão de executivo comercial"
       >
         <option value="all">Todos os Executivos (Consolidado)</option>
